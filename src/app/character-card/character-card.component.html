@@ -1,0 +1,50 @@
+<mat-card class="character-card" *ngIf="character">
+  <div class="card-content">
+    <div class="avatar-section">
+      <img [src]="character.avatarUrl || 'https://www.dndbeyond.com/content/skins/waterdeep/images/characters/default-avatar.png'" 
+           alt="{{ character.name }}">
+      <div class="avatar-overlay">
+        <h2>{{ character.name }}</h2>
+        <p>{{ character.race.fullName }}</p>
+      </div>
+    </div>
+    
+    <div class="details-section">
+      <div class="header-row">
+        <div>
+          <h3 class="section-title">Classes</h3>
+          <mat-chip-set>
+            <mat-chip *ngFor="let cls of character.classes" class="class-chip">
+              {{ cls.definition.name }} <span class="level-badge">{{ cls.level }}</span>
+            </mat-chip>
+          </mat-chip-set>
+        </div>
+        <div class="level-display">
+          <div class="level-label">Level</div>
+          <div class="level-value">{{ totalLevel }}</div>
+        </div>
+      </div>
+
+      <div class="hp-section">
+        <div class="hp-row">
+          <span class="hp-label">Hit Points</span>
+          <span class="hp-value">{{ character.baseHitPoints }} <span class="hp-max">/ {{ character.baseHitPoints }}</span></span>
+        </div>
+        <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+      </div>
+
+      <div>
+        <h3 class="section-title">Ability Scores</h3>
+        <div class="stats-grid">
+          <div *ngFor="let stat of character.stats" class="stat-box">
+            <div class="stat-name">{{ stat.name }}</div>
+            <div class="stat-value">{{ stat.value }}</div>
+            <div class="stat-mod" [ngClass]="{'positive': getModifier(stat.value).startsWith('+'), 'negative': getModifier(stat.value).startsWith('-')}">
+              {{ getModifier(stat.value) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-card>

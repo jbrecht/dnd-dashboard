@@ -1,0 +1,37 @@
+<div class="dashboard-container">
+  <div class="dashboard-content">
+    <header>
+      <h1>DnD Dashboard</h1>
+      <p>Visualize your DnD Beyond character stats in style.</p>
+    </header>
+
+    <div class="input-card">
+      <div class="input-container">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>DnD Beyond Character URL</mat-label>
+          <input matInput [(ngModel)]="characterUrl" placeholder="https://www.dndbeyond.com/characters/123456" (keyup.enter)="importCharacter()">
+          <mat-icon matPrefix class="mr-2 text-gray-400">link</mat-icon>
+          <button mat-icon-button matSuffix (click)="importCharacter()" [attr.aria-label]="'Import character'" color="primary" [disabled]="loading">
+            <mat-icon>download</mat-icon>
+          </button>
+          <mat-hint>Paste your character's public URL here</mat-hint>
+        </mat-form-field>
+
+        <div *ngIf="error" class="error-box">
+          <div class="error-content">
+            <mat-icon>error</mat-icon>
+            <p>{{ error }}</p>
+          </div>
+        </div>
+
+        <div *ngIf="loading" class="loading-container">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="character" class="card-container">
+      <app-character-card [character]="character"></app-character-card>
+    </div>
+  </div>
+</div>
