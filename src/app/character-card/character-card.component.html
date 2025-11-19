@@ -7,6 +7,9 @@
         <h2>{{ character.name }}</h2>
         <p>{{ character.race.fullName }}</p>
       </div>
+      <button mat-icon-button color="warn" class="delete-btn" (click)="delete()" aria-label="Remove character">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
     
     <div class="details-section">

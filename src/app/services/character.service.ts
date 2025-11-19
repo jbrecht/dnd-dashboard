@@ -24,7 +24,7 @@ export class CharacterService {
     );
   }
 
-  private extractId(url: string): string | null {
+  public extractId(url: string): string | null {
     const match = url.match(/\/characters?\/(\d+)/);
     return match ? match[1] : null;
   }
