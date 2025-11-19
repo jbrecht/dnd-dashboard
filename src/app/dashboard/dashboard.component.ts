@@ -25,7 +25,7 @@ import { CharacterCardComponent } from '../character-card/character-card.compone
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-  characterUrl = '';
+  characterInput = '';
   characters: Character[] = [];
   loading = false;
   error = '';
@@ -51,15 +51,15 @@ export class DashboardComponent implements OnInit {
   }
 
   importCharacter() {
-    if (!this.characterUrl) return;
-    this.fetchCharacter(this.characterUrl, true);
+    if (!this.characterInput) return;
+    this.fetchCharacter(this.characterInput, true);
   }
 
-  fetchCharacter(url: string, save: boolean) {
+  fetchCharacter(input: string, save: boolean) {
     this.loading = true;
     this.error = '';
 
-    this.characterService.getCharacter(url).subscribe({
+    this.characterService.getCharacter(input).subscribe({
       next: (data) => {
         if (this.characters.some(c => c.id === data.id)) {
            this.error = 'Character already added.';
@@ -69,8 +69,8 @@ export class DashboardComponent implements OnInit {
 
         this.characters.push(data);
         if (save) {
-          this.saveCharacterUrl(url);
-          this.characterUrl = '';
+          this.saveCharacterInput(input);
+          this.characterInput = '';
         }
         this.loading = false;
       },
@@ -82,11 +82,11 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  saveCharacterUrl(url: string) {
+  saveCharacterInput(input: string) {
     const saved = localStorage.getItem(this.STORAGE_KEY);
     let urls: string[] = saved ? JSON.parse(saved) : [];
-    if (!urls.includes(url)) {
-      urls.push(url);
+    if (!urls.includes(input)) {
+      urls.push(input);
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(urls));
     }
   }
@@ -100,8 +100,8 @@ export class DashboardComponent implements OnInit {
      const saved = localStorage.getItem(this.STORAGE_KEY);
      if (saved) {
        let urls = JSON.parse(saved) as string[];
-       urls = urls.filter(url => {
-         const id = this.characterService.extractId(url);
+       urls = urls.filter(savedInput => {
+         const id = this.characterService.extractId(savedInput);
          return id !== characterId.toString();
        });
        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(urls));

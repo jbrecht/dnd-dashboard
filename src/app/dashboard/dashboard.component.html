@@ -2,19 +2,18 @@
   <div class="dashboard-content">
     <header>
       <h1>DnD Dashboard</h1>
-      <p>Visualize your DnD Beyond character stats in style.</p>
     </header>
 
     <div class="input-card">
       <div class="input-container">
         <mat-form-field appearance="outline" class="w-full">
-          <mat-label>DnD Beyond Character URL</mat-label>
-          <input matInput [(ngModel)]="characterUrl" placeholder="https://www.dndbeyond.com/characters/123456" (keyup.enter)="importCharacter()">
-          <mat-icon matPrefix class="mr-2 text-gray-400">link</mat-icon>
+          <mat-label>Character ID</mat-label>
+          <input matInput [(ngModel)]="characterInput" placeholder="123456" (keyup.enter)="importCharacter()">
+          <mat-icon matPrefix class="mr-2 text-gray-400">tag</mat-icon>
           <button mat-icon-button matSuffix (click)="importCharacter()" [attr.aria-label]="'Import character'" color="primary" [disabled]="loading">
             <mat-icon>download</mat-icon>
           </button>
-          <mat-hint>Paste your character's public URL here</mat-hint>
+          <mat-hint>Enter your DnD Beyond Character ID</mat-hint>
         </mat-form-field>
 
         <div *ngIf="error" class="error-box">

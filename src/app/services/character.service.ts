@@ -24,8 +24,13 @@ export class CharacterService {
     );
   }
 
-  public extractId(url: string): string | null {
-    const match = url.match(/\/characters?\/(\d+)/);
+  public extractId(input: string): string | null {
+    // Check if input is already a numeric ID
+    if (/^\d+$/.test(input.trim())) {
+      return input.trim();
+    }
+    // Otherwise try to extract from URL
+    const match = input.match(/\/characters?\/(\d+)/);
     return match ? match[1] : null;
   }
 
