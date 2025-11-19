@@ -3,7 +3,7 @@ export interface Character {
   name: string;
   classes: CharacterClass[];
   race: { fullName: string };
-  baseHitPoints: number;
+  hitPoints: number;
   stats: AbilityStats[];
   avatarUrl: string;
   // Add more fields as we discover the JSON structure
