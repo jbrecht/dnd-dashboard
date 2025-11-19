@@ -1,53 +1,47 @@
-<mat-card class="character-card" *ngIf="character">
-  <div class="card-content">
-    <div class="avatar-section">
-      <img [src]="character.avatarUrl || 'https://www.dndbeyond.com/content/skins/waterdeep/images/characters/default-avatar.png'" 
-           alt="{{ character.name }}">
-      <div class="avatar-overlay">
-        <h2>{{ character.name }}</h2>
-        <p>{{ character.race.fullName }}</p>
-      </div>
-      <button mat-icon-button color="warn" class="delete-btn" (click)="delete()" aria-label="Remove character">
-        <mat-icon>delete</mat-icon>
-      </button>
+<div class="character-card">
+  <div class="card-top">
+    <div class="avatar-background">
+      <img [src]="character.avatarUrl || 'assets/placeholder.png'" alt="{{ character.name }}">
+      <div class="avatar-overlay"></div>
     </div>
     
-    <div class="details-section">
-      <div class="header-row">
-        <div>
-          <h3 class="section-title">Classes</h3>
-          <mat-chip-set>
-            <mat-chip *ngFor="let cls of character.classes" class="class-chip">
-              {{ cls.definition.name }} <span class="level-badge">{{ cls.level }}</span>
-            </mat-chip>
-          </mat-chip-set>
-        </div>
-        <div class="level-display">
-          <div class="level-label">Level</div>
-          <div class="level-value">{{ totalLevel }}</div>
+    <button mat-icon-button class="delete-btn" (click)="delete()" aria-label="Delete character">
+      <mat-icon>delete</mat-icon>
+    </button>
+
+    <div class="card-info">
+      <div class="header-content">
+        <h2>{{ character.name }}</h2>
+        <p class="subtitle">{{ character.race.fullName }}</p>
+        
+        <div class="classes-list">
+          <span *ngFor="let cls of character.classes" class="class-chip">
+            {{ cls.definition.name }} <span class="level-badge">{{ cls.level }}</span>
+          </span>
         </div>
       </div>
 
-      <div class="hp-section">
-        <div class="hp-row">
-          <span class="hp-label">Hit Points</span>
-          <span class="hp-value">{{ character.hitPoints }} <span class="hp-max">/ {{ character.hitPoints }}</span></span>
+      <div class="hp-container">
+        <div class="hp-label">HP</div>
+        <div class="hp-values">
+          <span class="current">{{ character.hitPoints }}</span>
+          <span class="separator">/</span>
+          <span class="max">{{ character.hitPoints }}</span>
         </div>
-        <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+        <mat-progress-bar mode="determinate" value="100" class="hp-bar"></mat-progress-bar>
       </div>
+    </div>
+  </div>
 
-      <div>
-        <h3 class="section-title">Ability Scores</h3>
-        <div class="stats-grid">
-          <div *ngFor="let stat of character.stats" class="stat-box">
-            <div class="stat-name">{{ stat.name }}</div>
-            <div class="stat-value">{{ stat.value }}</div>
-            <div class="stat-mod" [ngClass]="{'positive': getModifier(stat.value).startsWith('+'), 'negative': getModifier(stat.value).startsWith('-')}">
-              {{ getModifier(stat.value) }}
-            </div>
-          </div>
+  <div class="card-bottom">
+    <div class="stats-grid">
+      <div class="stat-box" *ngFor="let stat of character.stats">
+        <div class="stat-name">{{ stat.name }}</div>
+        <div class="stat-value">{{ stat.value }}</div>
+        <div class="stat-mod" [ngClass]="{'positive': getModifier(stat.value) > 0, 'negative': getModifier(stat.value) < 0}">
+          {{ getModifier(stat.value) > 0 ? '+' : '' }}{{ getModifier(stat.value) }}
         </div>
       </div>
     </div>
   </div>
-</mat-card>
+</div>

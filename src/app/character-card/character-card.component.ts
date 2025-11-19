@@ -31,9 +31,8 @@ export class CharacterCardComponent {
     return this.character.classes.reduce((acc, curr) => acc + curr.level, 0);
   }
 
-  getModifier(score: number): string {
-    const mod = Math.floor((score - 10) / 2);
-    return mod >= 0 ? `+${mod}` : `${mod}`;
+  getModifier(score: number): number {
+    return Math.floor((score - 10) / 2);
   }
 
   delete() {

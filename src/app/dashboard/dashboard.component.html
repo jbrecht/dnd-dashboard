@@ -30,7 +30,7 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 gap-8">
+    <div class="character-grid">
       <div *ngFor="let char of characters" class="card-container">
         <app-character-card [character]="char" (deleteRequest)="removeCharacter($event)"></app-character-card>
       </div>
