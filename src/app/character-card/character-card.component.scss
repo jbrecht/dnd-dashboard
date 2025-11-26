@@ -7,6 +7,7 @@
   transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
   display: flex;
   flex-direction: column;
+  position: relative; /* Ensure loading overlay is contained */
 
   &:hover {
     transform: translateY(-4px);
@@ -73,8 +74,8 @@
     font-size: .7rem;
     font-weight: 600;
     
-    &.positive { color: #4ade80; } /* Green-400 */
-    &.negative { color: #f87171; } /* Red-400 */
+    &.positive { color: var(--stat-positive); }
+    &.negative { color: var(--stat-negative); }
   }
 }
 

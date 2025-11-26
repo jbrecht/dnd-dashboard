@@ -18,6 +18,8 @@ html {
   --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
   --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
   --overlay-color: rgba(0, 0, 0, 0.7);
+  --stat-positive: #4ade80; /* Green-400 */
+  --stat-negative: #f87171; /* Red-400 */
 }
 
 .light-theme {
@@ -33,6 +35,8 @@ html {
   --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   --overlay-color: rgba(255, 255, 255, 0.7);
+  --stat-positive: #16a34a; /* Green-600 */
+  --stat-negative: #dc2626; /* Red-600 */
 }
 
 body {
