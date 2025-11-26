@@ -42,6 +42,38 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.loadSavedCharacters();
+    this.refreshCharacters();
+  }
+
+  refreshCharacters() {
+    this.characters.forEach(char => this.refreshCharacter(char.id));
+  }
+
+  refreshCharacter(id: number) {
+    const charIndex = this.characters.findIndex(c => c.id === id);
+    if (charIndex !== -1) {
+      this.characters[charIndex].isLoading = true;
+    }
+
+    this.characterService.getCharacter(id.toString()).subscribe({
+      next: (parsed: ParsedCharacter) => {
+        const updated = this.mapParsedToCharacter(id.toString(), parsed);
+        updated.isLoading = false;
+        
+        const index = this.characters.findIndex(c => c.id === id);
+        if (index !== -1) {
+          this.characters[index] = updated;
+          this.saveCharacters();
+        }
+      },
+      error: (err) => {
+        console.error(`Failed to refresh character ${id}`, err);
+        const index = this.characters.findIndex(c => c.id === id);
+        if (index !== -1) {
+          this.characters[index].isLoading = false;
+        }
+      }
+    });
   }
 
   loadSavedCharacters() {

@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +16,7 @@ import { Character } from '../models/character.model';
     CommonModule,
     MatCardModule,
     MatProgressBarModule,
+    MatProgressSpinnerModule,
     MatChipsModule,
     MatListModule,
     MatButtonModule,
@@ -26,6 +28,7 @@ import { Character } from '../models/character.model';
 export class CharacterCardComponent {
   @Input() character!: Character;
   @Output() deleteRequest = new EventEmitter<number>();
+  @Output() refreshRequest = new EventEmitter<number>();
 
   get totalLevel(): number {
     return this.character.classes.reduce((acc, curr) => acc + curr.level, 0);
@@ -37,5 +40,9 @@ export class CharacterCardComponent {
 
   delete() {
     this.deleteRequest.emit(this.character.id);
+  }
+
+  refresh() {
+    this.refreshRequest.emit(this.character.id);
   }
 }

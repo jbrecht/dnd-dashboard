@@ -1,9 +1,16 @@
 <div class="character-card">
+  <div class="loading-overlay" *ngIf="character.isLoading">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
   <div class="card-top">
     <div class="avatar-background">
       <img [src]="character.avatarUrl || 'assets/placeholder.png'" alt="{{ character.name }}">
       <div class="avatar-overlay"></div>
     </div>
+    
+    <button mat-icon-button class="refresh-btn" (click)="refresh()" aria-label="Refresh character">
+      <mat-icon>refresh</mat-icon>
+    </button>
     
     <button mat-icon-button class="delete-btn" (click)="delete()" aria-label="Delete character">
       <mat-icon>delete</mat-icon>

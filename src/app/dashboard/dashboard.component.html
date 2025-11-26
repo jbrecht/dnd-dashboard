@@ -31,7 +31,7 @@
 
     <div class="character-grid">
       <div *ngFor="let char of characters" class="card-container">
-        <app-character-card [character]="char" (deleteRequest)="removeCharacter($event)"></app-character-card>
+        <app-character-card [character]="char" (deleteRequest)="removeCharacter($event)" (refreshRequest)="refreshCharacter($event)"></app-character-card>
       </div>
     </div>
   </div>
