@@ -10,22 +10,14 @@
           <mat-label>Character ID</mat-label>
           <input matInput [(ngModel)]="characterInput" placeholder="123456" (keyup.enter)="importCharacter()">
           <mat-icon matPrefix class="mr-2 text-gray-400">tag</mat-icon>
-          <button mat-icon-button matSuffix (click)="importCharacter()" [attr.aria-label]="'Import character'" color="primary" [disabled]="loading">
+          <button mat-icon-button matSuffix (click)="importCharacter()" [attr.aria-label]="'Import character'" color="primary">
             <mat-icon>download</mat-icon>
           </button>
-          <mat-hint>Enter your DnD Beyond Character ID</mat-hint>
+          <mat-hint *ngIf="!error">Enter your DnD Beyond Character ID</mat-hint>
+          <mat-hint *ngIf="error" style="color: #ef4444;">{{ error }}</mat-hint>
         </mat-form-field>
 
-        <div *ngIf="error" class="error-box">
-          <div class="error-content">
-            <mat-icon>error</mat-icon>
-            <p>{{ error }}</p>
-          </div>
-        </div>
 
-        <div *ngIf="loading" class="loading-container">
-          <div class="spinner"></div>
-        </div>
       </div>
     </div>
 

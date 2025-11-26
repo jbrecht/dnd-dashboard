@@ -107,30 +107,55 @@ export class DashboardComponent implements OnInit {
 
     // Extract ID if full URL is pasted
     const idMatch = this.characterInput.match(/\/characters?\/(\d+)/);
-    const id = idMatch ? idMatch[1] : this.characterInput.trim();
+    const idStr = idMatch ? idMatch[1] : this.characterInput.trim();
+    const id = parseInt(idStr, 10);
 
-    if (this.characters.some(c => c.id.toString() === id)) {
-      this.error = 'Character already added';
+    if (this.characters.some(c => c.id === id)) {
+      this.showTemporaryError('Character already added');
       return;
     }
 
-    this.loading = true;
     this.error = '';
+    this.characterInput = '';
 
-    this.characterService.getCharacter(id).subscribe({
+    // Add placeholder
+    const placeholder: Character = {
+      id: id,
+      name: 'Loading...',
+      race: { fullName: 'Loading...' },
+      classes: [],
+      hitPoints: { current: 0, max: 0, temp: 0 },
+      stats: [],
+      avatarUrl: '',
+      isLoading: true
+    };
+    this.characters.push(placeholder);
+
+    this.characterService.getCharacter(idStr).subscribe({
       next: (parsed: ParsedCharacter) => {
-        const character: Character = this.mapParsedToCharacter(id, parsed);
-        this.characters.push(character);
-        this.saveCharacters();
-        this.characterInput = '';
-        this.loading = false;
+        const character: Character = this.mapParsedToCharacter(idStr, parsed);
+        character.isLoading = false;
+        
+        const index = this.characters.findIndex(c => c.id === id);
+        if (index !== -1) {
+          this.characters[index] = character;
+          this.saveCharacters();
+        }
       },
       error: (err) => {
         console.error(err);
-        this.error = err.message || 'Failed to load character';
-        this.loading = false;
+        this.showTemporaryError(err.message || 'Failed to load character');
+        // Remove placeholder
+        this.characters = this.characters.filter(c => c.id !== id);
       }
     });
+  }
+
+  private showTemporaryError(message: string) {
+    this.error = message;
+    setTimeout(() => {
+      this.error = '';
+    }, 2000);
   }
 
   private mapParsedToCharacter(id: string, parsed: ParsedCharacter): Character {
