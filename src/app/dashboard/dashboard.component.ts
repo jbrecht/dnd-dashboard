@@ -5,9 +5,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { CharacterService } from '../services/character.service';
+import { Character2Service, ParsedCharacter } from '../services/character2.service';
 import { Character } from '../models/character.model';
 import { CharacterCardComponent } from '../character-card/character-card.component';
+
+interface CachedCharacter {
+  input: string;
+  character: Character;
+  lastUpdated: number;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -32,7 +38,7 @@ export class DashboardComponent implements OnInit {
   
   private readonly STORAGE_KEY = 'dnd-dashboard';
 
-  constructor(private characterService: CharacterService) {}
+  constructor(private characterService: Character2Service) {}
 
   ngOnInit() {
     this.loadSavedCharacters();
@@ -42,69 +48,84 @@ export class DashboardComponent implements OnInit {
     const saved = localStorage.getItem(this.STORAGE_KEY);
     if (saved) {
       try {
-        const urls = JSON.parse(saved) as string[];
-        urls.forEach(url => this.fetchCharacter(url, false));
+        const parsed = JSON.parse(saved);
+        // Filter out expired cache (24h)
+        const now = Date.now();
+        this.characters = parsed
+          .filter((c: CachedCharacter) => now - c.lastUpdated < 24 * 60 * 60 * 1000)
+          .map((c: CachedCharacter) => c.character);
       } catch (e) {
-        console.error('Failed to parse saved characters', e);
+        console.error('Failed to load saved characters', e);
+        localStorage.removeItem(this.STORAGE_KEY);
       }
     }
   }
 
-  importCharacter() {
-    if (!this.characterInput) return;
-    this.fetchCharacter(this.characterInput, true);
+  saveCharacters() {
+    const cache: CachedCharacter[] = this.characters.map(c => ({
+      input: c.id.toString(),
+      character: c,
+      lastUpdated: Date.now()
+    }));
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cache));
   }
 
-  fetchCharacter(input: string, save: boolean) {
+  importCharacter() {
+    if (!this.characterInput.trim()) return;
+
+    // Extract ID if full URL is pasted
+    const idMatch = this.characterInput.match(/\/characters?\/(\d+)/);
+    const id = idMatch ? idMatch[1] : this.characterInput.trim();
+
+    if (this.characters.some(c => c.id.toString() === id)) {
+      this.error = 'Character already added';
+      return;
+    }
+
     this.loading = true;
     this.error = '';
 
-    this.characterService.getCharacter(input).subscribe({
-      next: (data) => {
-        if (this.characters.some(c => c.id === data.id)) {
-           this.error = 'Character already added.';
-           this.loading = false;
-           return;
-        }
-
-        this.characters.push(data);
-        if (save) {
-          this.saveCharacterInput(input);
-          this.characterInput = '';
-        }
+    this.characterService.getCharacter(id).subscribe({
+      next: (parsed: ParsedCharacter) => {
+        const character: Character = this.mapParsedToCharacter(id, parsed);
+        this.characters.push(character);
+        this.saveCharacters();
+        this.characterInput = '';
         this.loading = false;
       },
       error: (err) => {
-        this.error = 'Failed to load character. Please check the URL and try again.';
-        this.loading = false;
         console.error(err);
+        this.error = err.message || 'Failed to load character';
+        this.loading = false;
       }
     });
   }
 
-  saveCharacterInput(input: string) {
-    const saved = localStorage.getItem(this.STORAGE_KEY);
-    let urls: string[] = saved ? JSON.parse(saved) : [];
-    if (!urls.includes(input)) {
-      urls.push(input);
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(urls));
-    }
+  private mapParsedToCharacter(id: string, parsed: ParsedCharacter): Character {
+    return {
+      id: parseInt(id, 10),
+      name: parsed.name,
+      race: { fullName: parsed.race },
+      classes: [{
+        level: parsed.level,
+        definition: { name: 'Total Level' },
+        isStartingClass: true
+      }],
+      hitPoints: parsed.hp.max,
+      avatarUrl: parsed.avatar,
+      stats: [
+        { id: 1, name: 'STR', value: parsed.stats.str },
+        { id: 2, name: 'DEX', value: parsed.stats.dex },
+        { id: 3, name: 'CON', value: parsed.stats.con },
+        { id: 4, name: 'INT', value: parsed.stats.int },
+        { id: 5, name: 'WIS', value: parsed.stats.wis },
+        { id: 6, name: 'CHA', value: parsed.stats.cha }
+      ]
+    };
   }
 
-  removeCharacter(characterId: number) {
-    this.characters = this.characters.filter(c => c.id !== characterId);
-    this.removeUrlFromStorage(characterId);
-  }
-
-  removeUrlFromStorage(characterId: number) {
-     const saved = localStorage.getItem(this.STORAGE_KEY);
-     if (saved) {
-       let urls = JSON.parse(saved) as string[];
-       urls = urls.filter(savedInput => {
-         const id = this.characterService.extractId(savedInput);
-         return id !== characterId.toString();
-       });
-       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(urls));
-     }
+  removeCharacter(id: number) {
+    this.characters = this.characters.filter(c => c.id !== id);
+    this.saveCharacters();
   }
 }
