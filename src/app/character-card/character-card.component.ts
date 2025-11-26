@@ -38,6 +38,14 @@ export class CharacterCardComponent {
     return Math.floor((score - 10) / 2);
   }
 
+  get hpStatus(): string {
+    if (!this.character.hitPoints.max) return 'healthy';
+    const pct = this.character.hitPoints.current / this.character.hitPoints.max;
+    if (pct < 0.1) return 'critical';
+    if (pct < 0.5) return 'bloodied';
+    return 'healthy';
+  }
+
   delete() {
     this.deleteRequest.emit(this.character.id);
   }

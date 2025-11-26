@@ -42,7 +42,7 @@
           <span class="separator">/</span>
           <span class="max">{{ character.hitPoints.max }}</span>
         </div>
-        <mat-progress-bar mode="determinate" [value]="(character.hitPoints.current / character.hitPoints.max) * 100" class="hp-bar"></mat-progress-bar>
+        <mat-progress-bar mode="determinate" [value]="(character.hitPoints.current / character.hitPoints.max) * 100" class="hp-bar" [class]="hpStatus"></mat-progress-bar>
       </div>
     </div>
   </div>
