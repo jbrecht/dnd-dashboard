@@ -111,7 +111,7 @@ export class DashboardComponent implements OnInit {
         definition: { name: c.name },
         isStartingClass: c.isStartingClass
       })),
-      hitPoints: parsed.hp.max,
+      hitPoints: parsed.hp,
       avatarUrl: parsed.avatar,
       stats: [
         { id: 1, name: 'STR', value: parsed.stats.str },

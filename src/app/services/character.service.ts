@@ -54,7 +54,11 @@ export class CharacterService {
       name: charData.name,
       classes: charData.classes,
       race: charData.race,
-      hitPoints: this.getCalculatedHP(charData, conStat),
+      hitPoints: {
+        current: this.getCalculatedHP(charData, conStat),
+        max: this.getCalculatedHP(charData, conStat),
+        temp: 0
+      },
       stats: stats,
       avatarUrl: charData.avatarUrl || charData.decorations?.avatarUrl
     };

@@ -24,11 +24,11 @@
       <div class="hp-container">
         <div class="hp-label">HP</div>
         <div class="hp-values">
-          <span class="current">{{ character.hitPoints }}</span>
+          <span class="current">{{ character.hitPoints.current }}</span>
           <span class="separator">/</span>
-          <span class="max">{{ character.hitPoints }}</span>
+          <span class="max">{{ character.hitPoints.max }}</span>
         </div>
-        <mat-progress-bar mode="determinate" value="100" class="hp-bar"></mat-progress-bar>
+        <mat-progress-bar mode="determinate" [value]="(character.hitPoints.current / character.hitPoints.max) * 100" class="hp-bar"></mat-progress-bar>
       </div>
     </div>
   </div>
