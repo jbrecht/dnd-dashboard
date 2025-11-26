@@ -1,7 +1,7 @@
 .dashboard-container {
   min-height: 100vh;
   /* background-color: #f3f4f6; Removed to let body bg show */
-  padding: 3rem 1rem;
+  padding: 1rem;
   
   @media (min-width: 640px) {
     padding-left: 1.5rem;
@@ -19,36 +19,29 @@
   margin: 0 auto;
 }
 
-header {
-  text-align: center;
-  margin-bottom: 3rem;
-  position: relative;
+.top-right-controls {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 100;
 
-  .theme-toggle {
-    position: absolute;
-    top: 0;
-    right: 0;
+  .theme-toggle, .add-btn {
     color: var(--text-secondary);
     
     &:hover {
       color: var(--text-color);
     }
   }
+}
 
-  h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    background: linear-gradient(to right, #818cf8, #c084fc); /* Lighter gradient */
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    margin-bottom: 1rem;
-  }
-
-  p {
-    font-size: 1.125rem;
-    color: var(--text-secondary);
-  }
+.input-card-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  margin-top: 0; /* Align with top-right controls */
+  min-height: 80px; /* Reserve space for the card/controls row */
 }
 
 .input-card {
@@ -56,21 +49,35 @@ header {
   padding: 1.5rem;
   border-radius: 1rem;
   box-shadow: var(--card-shadow);
-  margin-bottom: 2rem;
+  width: 100%;
   max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
   border: 1px solid var(--border-color);
   transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  position: relative;
+
+  .close-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    color: var(--text-secondary);
+    z-index: 10;
+    
+    &:hover {
+      color: var(--text-color);
+    }
+  }
 
   .input-container {
     display: flex;
     align-items: center;
     gap: 1rem;
+    justify-content: center;
+    padding-top: 1rem;
   }
 
   mat-form-field {
     width: 100%;
+    max-width: 300px;
     
     ::ng-deep .mat-mdc-text-field-wrapper {
       background-color: var(--input-bg) !important;

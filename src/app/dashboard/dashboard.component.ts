@@ -41,6 +41,7 @@ export class DashboardComponent implements OnInit {
   constructor(private characterService: Character2Service) {}
 
   isDarkMode = true;
+  showInput = true;
 
   ngOnInit() {
     this.loadTheme();
@@ -52,6 +53,10 @@ export class DashboardComponent implements OnInit {
     this.isDarkMode = !this.isDarkMode;
     this.applyTheme();
     localStorage.setItem('dnd-dashboard-theme', this.isDarkMode ? 'dark' : 'light');
+  }
+
+  toggleInput() {
+    this.showInput = !this.showInput;
   }
 
   private loadTheme() {
