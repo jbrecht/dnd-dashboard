@@ -16,18 +16,25 @@
       <mat-icon>delete</mat-icon>
     </button>
 
-    <div class="card-info">
-      <div class="header-content">
-        <h2>{{ character.name }}</h2>
-        <p class="subtitle">{{ character.race.fullName }}</p>
-        
-        <div class="classes-list">
-          <span *ngFor="let cls of character.classes" class="class-chip">
-            {{ cls.definition.name }} <span class="level-badge">{{ cls.level }}</span>
-          </span>
+    <div class="card-header">
+      <h2>{{ character.name }}</h2>
+      <p class="subtitle">{{ character.race.fullName }}</p>
+      <div class="classes-list">
+        <div class="class-chip" *ngFor="let cls of character.classes">
+          {{ cls.definition.name }}
+          <span class="level-badge">{{ cls.level }}</span>
         </div>
       </div>
+    </div>
 
+    <div class="card-footer-info">
+      <div class="ac-container">
+        <div class="ac-label">AC</div>
+        <div class="ac-value">
+          <mat-icon class="ac-shield">shield</mat-icon>
+          <span>{{ character.armorClass }}</span>
+        </div>
+      </div>
       <div class="hp-container">
         <div class="hp-label">HP</div>
         <div class="hp-values">

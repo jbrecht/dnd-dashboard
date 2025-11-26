@@ -34,7 +34,7 @@
   color: white;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between; /* Push header to top, footer to bottom */
 }
 
 .avatar-background {
@@ -58,7 +58,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.1) 100%);
+    /* Dark at top for text, transparent in middle, dark at bottom for HP */
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 30%, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0.9) 100%);
   }
 }
 
@@ -69,6 +70,9 @@
   color: white;
   z-index: 10;
   background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   
   &:hover {
     background-color: rgba(239, 68, 68, 0.8); /* Red on hover */
@@ -82,23 +86,20 @@
   color: white;
   z-index: 10;
   background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   
   &:hover {
     background-color: rgba(59, 130, 246, 0.8); /* Blue on hover */
   }
 }
 
-.card-info {
+.card-header {
   position: relative;
   z-index: 1;
   padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-.header-content {
-  flex: 1;
+  padding-right: 6rem; /* Avoid overlap with buttons */
   
   h2 {
     font-size: 1.5rem;
@@ -142,9 +143,59 @@
   }
 }
 
+.card-footer-info {
+  position: relative;
+  z-index: 1;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between; /* AC left, HP right */
+  align-items: flex-end;
+}
+
+.ac-container {
+  text-align: center;
+  min-width: 50px;
+  
+  .ac-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    opacity: 0.8;
+    margin-bottom: 0.125rem;
+  }
+
+  .ac-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 2.5rem;
+    height: 2.5rem;
+    
+    .ac-shield {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      opacity: 0.2;
+      z-index: 0;
+    }
+
+    span {
+      position: relative;
+      z-index: 1;
+    }
+  }
+}
+
 .hp-container {
   text-align: right;
-  margin-left: 1rem;
   min-width: 80px;
 
   .hp-label {

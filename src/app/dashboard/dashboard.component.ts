@@ -125,6 +125,7 @@ export class DashboardComponent implements OnInit {
       race: { fullName: 'Loading...' },
       classes: [],
       hitPoints: { current: 0, max: 0, temp: 0 },
+      armorClass: 0,
       stats: [],
       avatarUrl: '',
       isLoading: true
@@ -169,6 +170,7 @@ export class DashboardComponent implements OnInit {
         isStartingClass: c.isStartingClass
       })),
       hitPoints: parsed.hp,
+      armorClass: parsed.ac,
       avatarUrl: parsed.avatar,
       stats: [
         { id: 1, name: 'STR', value: parsed.stats.str },

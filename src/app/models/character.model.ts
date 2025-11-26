@@ -6,6 +6,7 @@ export interface Character {
   hitPoints: { current: number; max: number; temp: number };
   stats: AbilityStats[];
   avatarUrl: string;
+  armorClass: number;
   isLoading?: boolean;
   // Add more fields as we discover the JSON structure
 }

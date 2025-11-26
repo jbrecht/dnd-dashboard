@@ -59,6 +59,7 @@ export class CharacterService {
         max: this.getCalculatedHP(charData, conStat),
         temp: 0
       },
+      armorClass: 10, // Default for old service as we aren't using it
       stats: stats,
       avatarUrl: charData.avatarUrl || charData.decorations?.avatarUrl
     };
