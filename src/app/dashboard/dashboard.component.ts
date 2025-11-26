@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Character2Service, ParsedCharacter } from '../services/character2.service';
 import { Character } from '../models/character.model';
+import { CharacterService } from '../services/character.service';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { CharacterCardComponent } from '../character-card/character-card.component';
 
 interface CachedCharacter {
@@ -20,15 +22,23 @@ interface CachedCharacter {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    MatInputModule,
-    MatButtonModule,
     MatIconModule,
+    MatButtonModule,
+    MatInputModule,
     MatFormFieldModule,
+    FormsModule,
     CharacterCardComponent
   ],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrls: ['./dashboard.component.scss'],
+  animations: [
+    trigger('cardAnimation', [
+      transition(':leave', [
+        style({ opacity: 1, transform: 'scale(1)', height: '*' }),
+        animate('300ms ease-out', style({ opacity: 0, transform: 'scale(0.8)', height: 0, margin: 0 }))
+      ])
+    ])
+  ]
 })
 export class DashboardComponent implements OnInit {
   characterInput = '';

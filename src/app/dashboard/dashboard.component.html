@@ -32,9 +32,13 @@
     </div>
 
     <div class="character-grid">
-      <div *ngFor="let char of characters" class="card-container">
-        <app-character-card [character]="char" (deleteRequest)="removeCharacter($event)" (refreshRequest)="refreshCharacter($event)"></app-character-card>
-      </div>
+      <app-character-card 
+        *ngFor="let char of characters" 
+        [character]="char"
+        (deleteRequest)="removeCharacter(char.id)"
+        (refreshRequest)="refreshCharacter(char.id)"
+        [@cardAnimation]>
+      </app-character-card>
     </div>
   </div>
 </div>
