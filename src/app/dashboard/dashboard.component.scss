@@ -1,6 +1,6 @@
 .dashboard-container {
   min-height: 100vh;
-  background-color: #f3f4f6;
+  /* background-color: #f3f4f6; Removed to let body bg show */
   padding: 3rem 1rem;
   
   @media (min-width: 640px) {
@@ -22,11 +22,23 @@
 header {
   text-align: center;
   margin-bottom: 3rem;
+  position: relative;
+
+  .theme-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: var(--text-secondary);
+    
+    &:hover {
+      color: var(--text-color);
+    }
+  }
 
   h1 {
     font-size: 3rem;
     font-weight: 800;
-    background: linear-gradient(to right, #4f46e5, #9333ea);
+    background: linear-gradient(to right, #818cf8, #c084fc); /* Lighter gradient */
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -35,30 +47,47 @@ header {
 
   p {
     font-size: 1.125rem;
-    color: #4b5563;
+    color: var(--text-secondary);
   }
 }
 
 .input-card {
-  background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  padding: 2rem;
-  margin-bottom: 3rem;
-  transition: all 0.3s;
-  max-width: 48rem; /* Keep input card centered and reasonable width */
+  background-color: var(--surface-color);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 2rem;
+  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  border: 1px solid var(--border-color);
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
 
-  &:hover {
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  .input-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
   }
-}
 
-.input-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  mat-form-field {
+    width: 100%;
+    
+    ::ng-deep .mat-mdc-text-field-wrapper {
+      background-color: var(--input-bg) !important;
+    }
+    
+    ::ng-deep .mat-mdc-input-element {
+      color: var(--text-color) !important;
+    }
+
+    ::ng-deep .mat-mdc-form-field-label {
+      color: var(--text-secondary) !important;
+    }
+    
+    ::ng-deep .mat-mdc-form-field-hint {
+      color: var(--text-secondary) !important;
+    }
+  }
 }
 
 .error-box {

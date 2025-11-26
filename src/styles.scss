@@ -2,14 +2,46 @@
 
 /* You can add global styles to this file, and also import other style files */
 
-html,
-body {
+html {
   height: 100%;
 }
+:root {
+  /* Dark Theme (Default) */
+  --bg-color: #111827;
+  --surface-color: #1f2937;
+  --surface-secondary: #374151;
+  --text-color: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --border-color: #374151;
+  --border-secondary: #4b5563;
+  --input-bg: #374151;
+  --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+  --overlay-color: rgba(0, 0, 0, 0.7);
+}
+
+.light-theme {
+  /* Light Theme */
+  --bg-color: #f3f4f6;
+  --surface-color: #ffffff;
+  --surface-secondary: #f9fafb;
+  --text-color: #1f2937;
+  --text-secondary: #4b5563;
+  --border-color: #e5e7eb;
+  --border-secondary: #d1d5db;
+  --input-bg: #ffffff;
+  --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --overlay-color: rgba(255, 255, 255, 0.7);
+}
+
 body {
+  height: 100%;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: #f3f4f6;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 /* Fix for Tailwind preflight affecting Material icons */

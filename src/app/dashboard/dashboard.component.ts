@@ -40,9 +40,37 @@ export class DashboardComponent implements OnInit {
 
   constructor(private characterService: Character2Service) {}
 
+  isDarkMode = true;
+
   ngOnInit() {
+    this.loadTheme();
     this.loadSavedCharacters();
     this.refreshCharacters();
+  }
+
+  toggleTheme() {
+    this.isDarkMode = !this.isDarkMode;
+    this.applyTheme();
+    localStorage.setItem('dnd-dashboard-theme', this.isDarkMode ? 'dark' : 'light');
+  }
+
+  private loadTheme() {
+    const savedTheme = localStorage.getItem('dnd-dashboard-theme');
+    if (savedTheme) {
+      this.isDarkMode = savedTheme === 'dark';
+    } else {
+      // Check system preference
+      this.isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    this.applyTheme();
+  }
+
+  private applyTheme() {
+    if (this.isDarkMode) {
+      document.body.classList.remove('light-theme');
+    } else {
+      document.body.classList.add('light-theme');
+    }
   }
 
   refreshCharacters() {

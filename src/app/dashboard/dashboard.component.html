@@ -2,6 +2,9 @@
   <div class="dashboard-content">
     <header>
       <!-- <h1>DnD Dashboard</h1> -->
+      <button mat-icon-button (click)="toggleTheme()" class="theme-toggle" [attr.aria-label]="'Toggle theme'">
+        <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
     </header>
 
     <div class="input-card">
