@@ -9,6 +9,7 @@ export interface ParsedCharacter {
   avatar: string;
   hp: { current: number; max: number; temp: number };
   ac: number;
+  classes: { name: string; level: number; isStartingClass: boolean }[];
   stats: {
     str: number; strMod: number;
     dex: number; dexMod: number;
@@ -42,7 +43,7 @@ interface DDBCharacterData {
   inventory: any[];
   frameAvatarUrl: string;
   avatarUrl: string;
-  classes: { level: number }[];
+  classes: { level: number; definition: { name: string }; isStartingClass: boolean }[];
   name: string;
   race: { fullName: string };
   decorations?: { avatarUrl: string };
@@ -152,6 +153,12 @@ export class Character2Service {
     // --- 4. Final Object ---
     const avatar = data.avatarUrl || data.decorations?.avatarUrl || 'https://www.dndbeyond.com/content/skins/waterdeep/images/characters/default-avatar.png';
 
+    const classes = data.classes.map(cls => ({
+      name: cls.definition.name,
+      level: cls.level,
+      isStartingClass: cls.isStartingClass
+    }));
+
     return {
       name: data.name,
       race: data.race.fullName,
@@ -159,6 +166,7 @@ export class Character2Service {
       avatar: avatar,
       hp: { current: currentHp, max: maxHp, temp: tempHp },
       ac: ac,
+      classes: classes,
       stats: stats
     };
   }

@@ -106,11 +106,11 @@ export class DashboardComponent implements OnInit {
       id: parseInt(id, 10),
       name: parsed.name,
       race: { fullName: parsed.race },
-      classes: [{
-        level: parsed.level,
-        definition: { name: 'Total Level' },
-        isStartingClass: true
-      }],
+      classes: parsed.classes.map(c => ({
+        level: c.level,
+        definition: { name: c.name },
+        isStartingClass: c.isStartingClass
+      })),
       hitPoints: parsed.hp.max,
       avatarUrl: parsed.avatar,
       stats: [
