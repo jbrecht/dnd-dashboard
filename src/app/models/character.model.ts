@@ -11,9 +11,15 @@ export interface Character {
     perception: number;
     investigation: number;
     insight: number;
-    special: string[];
+    special: SpecialSense[];
   };
   isLoading?: boolean;
+}
+
+export interface SpecialSense {
+  name: string;
+  value: string;
+  icon: string;
 }
 
 export interface CharacterClass {

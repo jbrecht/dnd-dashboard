@@ -22,7 +22,7 @@ export interface ParsedCharacter {
     perception: number;
     investigation: number;
     insight: number;
-    special: string[];
+    special: { name: string; value: string; icon: string }[];
   };
 }
 
@@ -203,23 +203,38 @@ export class Character2Service {
       perception: getSkillScore('perception', stats.wisMod),
       investigation: getSkillScore('investigation', stats.intMod),
       insight: getSkillScore('insight', stats.wisMod),
-      special: [] as string[]
+      special: [] as { name: string; value: string; icon: string }[]
     };
 
     // Special Senses (Darkvision, etc.)
-    // Look for type: 'sense'
+    const getSenseIcon = (name: string): string => {
+      const lower = name.toLowerCase();
+      if (lower.includes('darkvision')) return 'nightlight_round';
+      if (lower.includes('blindsight')) return 'sensors';
+      if (lower.includes('tremorsense')) return 'vibration';
+      if (lower.includes('truesight')) return 'flare';
+      return 'help_outline';
+    };
+
     const specialSenses = allModifiers
       .filter(m => m.type === 'sense')
       .map(m => {
-        // Usually subType is the sense name (e.g., 'darkvision')
-        // We might need to format it nicely.
         const name = m.subType.charAt(0).toUpperCase() + m.subType.slice(1);
-        const value = m.value ? ` ${m.value} ft.` : '';
-        return `${name}${value}`;
+        const value = m.value ? `${m.value} ft.` : '';
+        return {
+          name: name,
+          value: value,
+          icon: getSenseIcon(name)
+        };
       });
     
-    // Deduplicate
-    senses.special = [...new Set(specialSenses)];
+    // Deduplicate by name
+    const seen = new Set();
+    senses.special = specialSenses.filter(s => {
+      const duplicate = seen.has(s.name);
+      seen.add(s.name);
+      return !duplicate;
+    });
 
     // --- 5. Final Object ---
     const avatar = data.avatarUrl || data.decorations?.avatarUrl || 'https://www.dndbeyond.com/content/skins/waterdeep/images/characters/default-avatar.png';

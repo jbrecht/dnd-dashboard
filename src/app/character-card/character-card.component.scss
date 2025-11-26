@@ -84,14 +84,7 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: 0.5rem;
-  
-  .passive-label {
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.8);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.25rem;
-  }
+
 
   .passives-row {
     display: flex;
@@ -240,13 +233,7 @@
   text-align: center;
   min-width: 50px;
   
-  .ac-label {
-    font-size: .65rem;
-    text-transform: uppercase;
-    font-weight: 700;
-    opacity: 0.8;
-    margin-bottom: .125rem;
-  }
+
 
   .ac-value {
     font-size: 1.5rem;
@@ -282,13 +269,7 @@
   text-align: right;
   min-width: 80px;
 
-  .hp-label {
-    font-size: .65rem;
-    text-transform: uppercase;
-    font-weight: 700;
-    opacity: 0.8;
-    margin-bottom: .125rem;
-  }
+
 
   .hp-values {
     font-size: 1.25rem;
