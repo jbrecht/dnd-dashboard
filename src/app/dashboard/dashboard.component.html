@@ -1,7 +1,7 @@
 <div class="dashboard-container">
   <div class="dashboard-content">
     <header>
-      <h1>DnD Dashboard</h1>
+      <!-- <h1>DnD Dashboard</h1> -->
     </header>
 
     <div class="input-card">
@@ -13,7 +13,7 @@
           <button mat-icon-button matSuffix (click)="importCharacter()" [attr.aria-label]="'Import character'" color="primary">
             <mat-icon>download</mat-icon>
           </button>
-          <mat-hint *ngIf="!error">Enter your DnD Beyond Character ID</mat-hint>
+          <mat-hint *ngIf="!error">Enter DnD Beyond Character ID</mat-hint>
           <mat-hint *ngIf="error" style="color: #ef4444;">{{ error }}</mat-hint>
         </mat-form-field>
 

@@ -110,6 +110,11 @@ export class DashboardComponent implements OnInit {
     const idStr = idMatch ? idMatch[1] : this.characterInput.trim();
     const id = parseInt(idStr, 10);
 
+    if (isNaN(id)) {
+      this.showTemporaryError('Invalid Character ID');
+      return;
+    }
+
     if (this.characters.some(c => c.id === id)) {
       this.showTemporaryError('Character already added');
       return;
@@ -147,7 +152,10 @@ export class DashboardComponent implements OnInit {
         console.error(err);
         this.showTemporaryError(err.message || 'Failed to load character');
         // Remove placeholder
-        this.characters = this.characters.filter(c => c.id !== id);
+        const index = this.characters.indexOf(placeholder);
+        if (index !== -1) {
+          this.characters.splice(index, 1);
+        }
       }
     });
   }
