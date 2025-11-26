@@ -18,11 +18,18 @@ export interface ParsedCharacter {
     wis: number; wisMod: number;
     cha: number; chaMod: number;
   };
+  senses: {
+    perception: number;
+    investigation: number;
+    insight: number;
+    special: string[];
+  };
 }
 
 interface DDBModifier {
   entityId: number;
   type: string;
+  subType: string;
   value?: number;
 }
 
@@ -33,8 +40,10 @@ interface DDBCharacterData {
   modifiers: {
     race: DDBModifier[];
     class: DDBModifier[];
+    background: DDBModifier[];
     feat: DDBModifier[];
     item: DDBModifier[];
+    condition: DDBModifier[];
   };
   baseHitPoints: number;
   bonusHitPoints: number;
@@ -72,23 +81,13 @@ export class Character2Service {
   private parseCharacter(data: DDBCharacterData): ParsedCharacter {
     
     // --- 1. Attributes (Stats) Calculation ---
-    // Formula: Base + User Bonus + (Race + Class + Feat + Item Modifiers)
-    // UNLESS an Override exists (Set score).
-
     const getStat = (id: number) => {
-      // 1. Check for Set Score Override first (e.g. Belt of Giant Strength)
-      // Note: Usually overrides in DDB are strict replacements if they exist and are > 0
       const override = data.overrideStats.find(s => s.id === id)?.value;
       if (override) return override;
 
-      // 2. Base (Rolled/Point Buy)
       const base = data.stats.find(s => s.id === id)?.value || 10;
-      
-      // 3. User Manual Bonus (from "Abilities" tab)
       const userBonus = data.bonusStats.find(s => s.id === id)?.value || 0;
 
-      // 4. Modifiers (Race, Class, Feat, Item)
-      // We search for type "bonus" and entityId matching the stat ID
       const sumModifiers = (group: DDBModifier[]) => {
         if (!group) return 0;
         return group
@@ -115,7 +114,6 @@ export class Character2Service {
       cha: getStat(6), chaMod: 0,
     };
 
-    // Calc Mods
     stats.strMod = getMod(stats.str);
     stats.dexMod = getMod(stats.dex);
     stats.conMod = getMod(stats.con);
@@ -130,9 +128,7 @@ export class Character2Service {
     const tempHp = data.temporaryHitPoints || 0;
 
     // --- 3. Armor Class ---
-    let ac = 10 + stats.dexMod; // Default
-
-    // Simple Inventory Checks
+    let ac = 10 + stats.dexMod;
     const bodyArmor = data.inventory.find(i => 
       i.equipped && i.definition.filterType === 'Armor' && [1, 2, 3].includes(i.definition.armorTypeId || 0)
     );
@@ -143,14 +139,89 @@ export class Character2Service {
     if (bodyArmor) {
       const armorBase = bodyArmor.definition.armorClass || 10;
       const type = bodyArmor.definition.armorTypeId;
-      if (type === 1) ac = armorBase + stats.dexMod; // Light
-      else if (type === 2) ac = armorBase + Math.min(stats.dexMod, 2); // Medium
-      else if (type === 3) ac = armorBase; // Heavy
+      if (type === 1) ac = armorBase + stats.dexMod;
+      else if (type === 2) ac = armorBase + Math.min(stats.dexMod, 2);
+      else if (type === 3) ac = armorBase;
     }
 
     if (shield) ac += (shield.definition.armorClass || 2);
 
-    // --- 4. Final Object ---
+    // --- 4. Senses Calculation ---
+    // Proficiency Bonus: ceil(level / 4) + 1
+    const proficiencyBonus = Math.ceil(totalLevel / 4) + 1;
+
+    const getAllModifiers = () => {
+      return [
+        ...(data.modifiers.race || []),
+        ...(data.modifiers.class || []),
+        ...(data.modifiers.background || []),
+        ...(data.modifiers.feat || []),
+        ...(data.modifiers.item || []),
+        ...(data.modifiers.condition || [])
+      ];
+    };
+
+    const allModifiers = getAllModifiers();
+
+    const getSkillScore = (skillName: string, abilityMod: number) => {
+      // 1. Base: 10 + Mod
+      let score = 10 + abilityMod;
+
+      // 2. Proficiency / Expertise
+      // Look for 'proficiency' or 'expertise' type with subType matching skill (e.g., 'perception')
+      // Note: DDB uses 'perception', 'investigation', 'insight' as subTypes usually.
+      // Sometimes subType is 'perception-skill' or just 'perception'.
+      
+      const skillSlug = skillName.toLowerCase().replace(' ', '-'); // e.g. 'perception'
+      
+      const proficiency = allModifiers.find(m => 
+        m.type === 'proficiency' && m.subType === skillSlug
+      );
+      
+      const expertise = allModifiers.find(m => 
+        m.type === 'expertise' && m.subType === skillSlug
+      );
+
+      if (expertise) {
+        score += (proficiencyBonus * 2);
+      } else if (proficiency) {
+        score += proficiencyBonus;
+      }
+
+      // 3. Bonuses
+      // type: 'bonus', subType: 'perception' (or 'passive-perception')
+      const bonuses = allModifiers
+        .filter(m => m.type === 'bonus' && (m.subType === skillSlug || m.subType === `passive-${skillSlug}`))
+        .reduce((acc, m) => acc + (m.value || 0), 0);
+      
+      score += bonuses;
+
+      return score;
+    };
+
+    const senses = {
+      perception: getSkillScore('perception', stats.wisMod),
+      investigation: getSkillScore('investigation', stats.intMod),
+      insight: getSkillScore('insight', stats.wisMod),
+      special: [] as string[]
+    };
+
+    // Special Senses (Darkvision, etc.)
+    // Look for type: 'sense'
+    const specialSenses = allModifiers
+      .filter(m => m.type === 'sense')
+      .map(m => {
+        // Usually subType is the sense name (e.g., 'darkvision')
+        // We might need to format it nicely.
+        const name = m.subType.charAt(0).toUpperCase() + m.subType.slice(1);
+        const value = m.value ? ` ${m.value} ft.` : '';
+        return `${name}${value}`;
+      });
+    
+    // Deduplicate
+    senses.special = [...new Set(specialSenses)];
+
+    // --- 5. Final Object ---
     const avatar = data.avatarUrl || data.decorations?.avatarUrl || 'https://www.dndbeyond.com/content/skins/waterdeep/images/characters/default-avatar.png';
 
     const classes = data.classes.map(cls => ({
@@ -167,7 +238,8 @@ export class Character2Service {
       hp: { current: currentHp, max: maxHp, temp: tempHp },
       ac: ac,
       classes: classes,
-      stats: stats
+      stats: stats,
+      senses: senses
     };
   }
 }

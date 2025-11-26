@@ -7,8 +7,13 @@ export interface Character {
   stats: AbilityStats[];
   avatarUrl: string;
   armorClass: number;
+  senses: {
+    perception: number;
+    investigation: number;
+    insight: number;
+    special: string[];
+  };
   isLoading?: boolean;
-  // Add more fields as we discover the JSON structure
 }
 
 export interface CharacterClass {

@@ -61,7 +61,8 @@ export class CharacterService {
       },
       armorClass: 10, // Default for old service as we aren't using it
       stats: stats,
-      avatarUrl: charData.avatarUrl || charData.decorations?.avatarUrl
+      avatarUrl: charData.avatarUrl || charData.decorations?.avatarUrl,
+      senses: { perception: 10, investigation: 10, insight: 10, special: [] }
     };
   }
 

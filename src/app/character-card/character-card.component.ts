@@ -34,8 +34,13 @@ export class CharacterCardComponent {
     return this.character.classes.reduce((acc, curr) => acc + curr.level, 0);
   }
 
-  getModifier(score: number): number {
-    return Math.floor((score - 10) / 2);
+  getModifier(value: number): number {
+    return Math.floor((value - 10) / 2);
+  }
+
+  getModifierString(value: number): string {
+    const mod = this.getModifier(value);
+    return mod > 0 ? `+${mod}` : `${mod}`;
   }
 
   get hpStatus(): string {

@@ -35,6 +35,23 @@
           <span>{{ character.armorClass }}</span>
         </div>
       </div>
+      <div class="passives-container" *ngIf="character.senses">
+        <div class="passive-label">Passives</div>
+        <div class="passives-row">
+          <div class="passive-item" title="Passive Perception">
+            <mat-icon>visibility</mat-icon>
+            <span>{{ character.senses.perception }}</span>
+          </div>
+          <div class="passive-item" title="Passive Investigation">
+            <mat-icon>search</mat-icon>
+            <span>{{ character.senses.investigation }}</span>
+          </div>
+          <div class="passive-item" title="Passive Insight">
+            <mat-icon>psychology</mat-icon>
+            <span>{{ character.senses.insight }}</span>
+          </div>
+        </div>
+      </div>
       <div class="hp-container">
         <div class="hp-label">HP</div>
         <div class="hp-values">
@@ -50,12 +67,14 @@
   <div class="card-bottom">
     <div class="stats-grid">
       <div class="stat-box" *ngFor="let stat of character.stats">
-        <div class="stat-name">{{ stat.name }}</div>
+        <div class="stat-label">{{ stat.name }}</div>
         <div class="stat-value">{{ stat.value }}</div>
-        <div class="stat-mod" [ngClass]="{'positive': getModifier(stat.value) > 0, 'negative': getModifier(stat.value) < 0}">
-          {{ getModifier(stat.value) > 0 ? '+' : '' }}{{ getModifier(stat.value) }}
+        <div class="stat-mod" [class.positive]="getModifier(stat.value) > 0" [class.negative]="getModifier(stat.value) < 0">
+          {{ getModifierString(stat.value) }}
         </div>
       </div>
     </div>
   </div>
+
+
 </div>
