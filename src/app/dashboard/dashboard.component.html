@@ -2,11 +2,11 @@
   <div class="dashboard-content">
     <!-- Top Right Controls -->
     <div class="top-right-controls">
-      <button mat-icon-button *ngIf="!showInput" (click)="toggleInput()" class="add-btn" [attr.aria-label]="'Show input'">
-        <mat-icon>person_add</mat-icon>
-      </button>
       <button mat-icon-button (click)="toggleTheme()" class="theme-toggle" [attr.aria-label]="'Toggle theme'">
         <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+      <button mat-icon-button *ngIf="!showInput" (click)="toggleInput()" class="add-btn" [attr.aria-label]="'Show input'">
+        <mat-icon>person_add</mat-icon>
       </button>
     </div>
 
