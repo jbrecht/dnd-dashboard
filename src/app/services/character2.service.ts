@@ -1,6 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, from, map } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
 
 export interface ParsedCharacter {
   name: string;
@@ -64,19 +66,40 @@ interface DDBCharacterData {
 export class Character2Service {
   private http = inject(HttpClient);
 
-  getCharacter(characterId: string): Observable<ParsedCharacter> {
-    const targetUrl = `https://character-service.dndbeyond.com/character/v5/character/${characterId}`;
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+  getCharacter(characterId: string, cobaltSessionCookie: string): Observable<ParsedCharacter> {
+      
+      // 1. Get Token
+      // Sending 'null' as body ensures no Content-Length issues
+      return this.http.post<any>('/api/auth/v1/access/accesstoken', null, {
+          headers: { 
+              'X-Cobalt-Session': cobaltSessionCookie 
+          }
+      }).pipe(
+          switchMap(authResponse => {
+              const freshBearerToken = authResponse.token;
+              
+              if (!freshBearerToken) {
+                  // If we get a 200 OK but no token, the Cookie is stale
+                  throw new Error("Auth successful, but no Token returned. Please refresh your DDB Cookie.");
+              }
 
-    return this.http.get<any>(proxyUrl).pipe(
-      map(response => {
-        if (!response || !response.data) {
-          throw new Error("Invalid Data Structure");
-        }
-        return this.parseCharacter(response.data);
-      })
-    );
+              // 2. Get Character
+              const url = `/api/character/${characterId}?includeCustomItems=true`;
+              return this.http.get<any>(url, {
+                  headers: {
+                      'Authorization': `Bearer ${freshBearerToken}`
+                  }
+              });
+          }),
+          map(response => {
+              if (response.success === false) {
+                  throw new Error(response.message || "D&D Beyond API Error");
+              }
+              return this.parseCharacter(response.data);
+          })
+      );
   }
+
 
   private parseCharacter(data: DDBCharacterData): ParsedCharacter {
     

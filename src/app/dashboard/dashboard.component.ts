@@ -41,6 +41,7 @@ interface CachedCharacter {
 })
 export class DashboardComponent implements OnInit {
   characterInput = '';
+  cobaltToken = '';
   characters: Character[] = [];
   loading = false;
   error = '';
@@ -54,8 +55,24 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.loadTheme();
+    this.loadToken();
     this.loadSavedCharacters();
     this.refreshCharacters();
+  }
+
+  loadToken() {
+    const token = localStorage.getItem('dnd-cobalt-token');
+    if (token) {
+      this.cobaltToken = token;
+    }
+  }
+
+  saveToken() {
+    if (this.cobaltToken) {
+      localStorage.setItem('dnd-cobalt-token', this.cobaltToken);
+    } else {
+      localStorage.removeItem('dnd-cobalt-token');
+    }
   }
 
   toggleTheme() {
@@ -97,7 +114,7 @@ export class DashboardComponent implements OnInit {
       this.characters[charIndex].isLoading = true;
     }
 
-    this.characterService.getCharacter(id.toString()).subscribe({
+    this.characterService.getCharacter(id.toString(), this.cobaltToken).subscribe({
       next: (parsed: ParsedCharacter) => {
         const updated = this.mapParsedToCharacter(id.toString(), parsed);
         updated.isLoading = false;
@@ -180,7 +197,7 @@ export class DashboardComponent implements OnInit {
     };
     this.characters.push(placeholder);
 
-    this.characterService.getCharacter(idStr).subscribe({
+    this.characterService.getCharacter(idStr, this.cobaltToken).subscribe({
       next: (parsed: ParsedCharacter) => {
         const character: Character = this.mapParsedToCharacter(idStr, parsed);
         character.isLoading = false;
