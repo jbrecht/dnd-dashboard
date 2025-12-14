@@ -7,7 +7,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Character2Service, ParsedCharacter } from '../services/character2.service';
 import { Character } from '../models/character.model';
-import { CharacterService } from '../services/character.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { CharacterCardComponent } from '../character-card/character-card.component';
 
@@ -194,7 +193,13 @@ export class DashboardComponent implements OnInit {
       },
       error: (err) => {
         console.error(err);
-        this.showTemporaryError(err.message || 'Failed to load character');
+        let message = 'Failed to load character';
+        if (err.status === 404) {
+          message = 'Character not found, check the ID';
+        } else if (err.status === 403) {
+          message = 'Character not found, it may not be public';
+        }
+        this.showTemporaryError(message);
         // Remove placeholder
         const index = this.characters.indexOf(placeholder);
         if (index !== -1) {
