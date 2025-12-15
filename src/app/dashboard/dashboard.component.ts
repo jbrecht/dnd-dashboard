@@ -224,6 +224,7 @@ export class DashboardComponent implements OnInit {
       classes: parsed.classes.map(c => ({
         level: c.level,
         definition: { name: c.name },
+        subclassDefinition: c.subclass ? { name: c.subclass } : undefined,
         isStartingClass: c.isStartingClass
       })),
       hitPoints: parsed.hp,

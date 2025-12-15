@@ -25,6 +25,7 @@ export interface SpecialSense {
 export interface CharacterClass {
   level: number;
   definition: { name: string };
+  subclassDefinition?: { name: string };
   isStartingClass: boolean;
 }
 

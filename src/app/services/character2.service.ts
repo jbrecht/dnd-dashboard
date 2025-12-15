@@ -9,7 +9,7 @@ export interface ParsedCharacter {
   avatar: string;
   hp: { current: number; max: number; temp: number };
   ac: number;
-  classes: { name: string; level: number; isStartingClass: boolean }[];
+  classes: { name: string; level: number; isStartingClass: boolean; subclass?: string }[];
   stats: {
     str: number; strMod: number;
     dex: number; dexMod: number;
@@ -52,7 +52,12 @@ interface DDBCharacterData {
   inventory: any[];
   frameAvatarUrl: string;
   avatarUrl: string;
-  classes: { level: number; definition: { name: string }; isStartingClass: boolean }[];
+  classes: { 
+    level: number; 
+    definition: { name: string }; 
+    subclassDefinition?: { name: string };
+    isStartingClass: boolean 
+  }[];
   name: string;
   race: { fullName: string };
   decorations?: { avatarUrl: string };
@@ -81,6 +86,7 @@ export class Character2Service {
   }
 
   private parseCharacter(data: DDBCharacterData): ParsedCharacter {
+    console.log(data);
     // --- 1. Attributes (Stats) Calculation ---
     const getStat = (id: number) => {
       const override = data.overrideStats.find(s => s.id === id)?.value;
@@ -243,7 +249,8 @@ export class Character2Service {
     const classes = data.classes.map(cls => ({
       name: cls.definition.name,
       level: cls.level,
-      isStartingClass: cls.isStartingClass
+      isStartingClass: cls.isStartingClass,
+      subclass: cls.subclassDefinition?.name
     }));
 
     return {
