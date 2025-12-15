@@ -29,28 +29,28 @@
 
     <div class="card-footer-info">
       <div class="ac-container">
-        <div class="ac-value">
+        <div class="ac-value" matTooltip="Armor Class">
           <mat-icon class="ac-shield">shield</mat-icon>
           <span>{{ character.armorClass }}</span>
         </div>
       </div>
       <div class="passives-container" *ngIf="character.senses">
         <div class="passives-row">
-          <div class="passive-item" title="Passive Perception">
+          <div class="passive-item" matTooltip="Passive Perception">
             <mat-icon>visibility</mat-icon>
             <span>{{ character.senses.perception }}</span>
           </div>
-          <div class="passive-item" title="Passive Investigation">
+          <div class="passive-item" matTooltip="Passive Investigation">
             <mat-icon>search</mat-icon>
             <span>{{ character.senses.investigation }}</span>
           </div>
-          <div class="passive-item" title="Passive Insight">
+          <div class="passive-item" matTooltip="Passive Insight">
             <mat-icon>psychology</mat-icon>
             <span>{{ character.senses.insight }}</span>
           </div>
           
           <!-- Special Senses -->
-          <div class="passive-item" *ngFor="let sense of character.senses.special" [title]="sense.name + ' ' + sense.value">
+          <div class="passive-item" *ngFor="let sense of character.senses.special" [matTooltip]="sense.name + ' ' + sense.value">
             <mat-icon>{{ sense.icon }}</mat-icon>
             <span>{{ sense.value.replace(' ft.', '') }}</span>
           </div>
@@ -58,9 +58,10 @@
       </div>
       <div class="hp-container">
         <div class="hp-values">
-          <span class="current">{{ character.hitPoints.current }}</span>
+          <span class="temp" *ngIf="character.hitPoints.temp > 0" matTooltip="Temporary Hit Points">+{{ character.hitPoints.temp }} </span>
+          <span class="current" matTooltip="Current Hit Points">{{ character.hitPoints.current }}</span>
           <span class="separator">/</span>
-          <span class="max">{{ character.hitPoints.max }}</span>
+          <span class="max" matTooltip="Maximum Hit Points">{{ character.hitPoints.max }}</span>
         </div>
         <mat-progress-bar mode="determinate" [value]="(character.hitPoints.current / character.hitPoints.max) * 100" class="hp-bar" [class]="hpStatus"></mat-progress-bar>
       </div>

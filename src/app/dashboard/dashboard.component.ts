@@ -245,4 +245,8 @@ export class DashboardComponent implements OnInit {
     this.characters = this.characters.filter(c => c.id !== id);
     this.saveCharacters();
   }
+
+  trackById(index: number, item: Character): number {
+    return item.id;
+  }
 }

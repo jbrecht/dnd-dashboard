@@ -33,7 +33,7 @@
 
     <div class="character-grid">
       <app-character-card 
-        *ngFor="let char of characters" 
+        *ngFor="let char of characters; trackBy: trackById" 
         [character]="char"
         (deleteRequest)="removeCharacter(char.id)"
         (refreshRequest)="refreshCharacter(char.id)"

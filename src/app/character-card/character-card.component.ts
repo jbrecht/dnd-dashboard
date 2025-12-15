@@ -7,6 +7,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Character } from '../models/character.model';
 
 @Component({
@@ -20,7 +21,9 @@ import { Character } from '../models/character.model';
     MatChipsModule,
     MatListModule,
     MatButtonModule,
-    MatIconModule
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule
   ],
   templateUrl: './character-card.component.html',
   styleUrl: './character-card.component.scss'
