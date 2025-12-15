@@ -59,6 +59,18 @@
             <span>{{ character.armorClass }}</span>
           </div>
         </div>
+
+        <div class="movement-stats">
+           <div class="stat-item" matTooltip="Initiative">
+             <mat-icon>timer</mat-icon>
+             <span>{{ character.initiative >= 0 ? '+' : '' }}{{ character.initiative }}</span>
+           </div>
+           <div class="stat-item" matTooltip="Speed">
+             <mat-icon>directions_run</mat-icon>
+             <span>{{ character.speed }}</span>
+           </div>
+        </div>
+
         <div class="hp-container">
           <div class="hp-values">
             <span class="temp" *ngIf="character.hitPoints.temp > 0" matTooltip="Temporary Hit Points">+{{ character.hitPoints.temp }} </span>

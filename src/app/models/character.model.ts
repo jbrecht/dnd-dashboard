@@ -7,6 +7,8 @@ export interface Character {
   stats: AbilityStats[];
   avatarUrl: string;
   armorClass: number;
+  speed: string;
+  initiative: number;
   senses: {
     perception: number;
     investigation: number;

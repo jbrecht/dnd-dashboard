@@ -9,6 +9,8 @@ export interface ParsedCharacter {
   avatar: string;
   hp: { current: number; max: number; temp: number };
   ac: number;
+  speed: string;
+  initiative: number;
   classes: { name: string; level: number; isStartingClass: boolean; subclass?: string }[];
   stats: {
     str: number; strMod: number;
@@ -59,7 +61,18 @@ interface DDBCharacterData {
     isStartingClass: boolean 
   }[];
   name: string;
-  race: { fullName: string };
+  race: { 
+    fullName: string;
+    weightSpeeds?: {
+      normal: {
+        walk: number;
+        fly: number;
+        burrow: number;
+        swim: number;
+        climb: number;
+      }
+    };
+  };
   decorations?: { avatarUrl: string };
 }
 
@@ -86,7 +99,7 @@ export class Character2Service {
   }
 
   private parseCharacter(data: DDBCharacterData): ParsedCharacter {
-    console.log(data);
+    // console.log(data);
     // --- 1. Attributes (Stats) Calculation ---
     const getStat = (id: number) => {
       const override = data.overrideStats.find(s => s.id === id)?.value;
@@ -253,6 +266,31 @@ export class Character2Service {
       subclass: cls.subclassDefinition?.name
     }));
 
+    // --- 6. Initiative ---
+    // Base is Dex Mod
+    // Add 'bonus' 'initiative'
+    const initBonuses = allModifiers
+      .filter(m => m.type === 'bonus' && m.subType === 'initiative')
+      .reduce((acc, m) => acc + (m.value || 0), 0);
+    const initiative = stats.dexMod + initBonuses;
+
+    // --- 7. Speed ---
+    // Base walking speed from race
+    // Add 'bonus' 'speed' or 'unarmored-movement' (often handled as bonus speed)
+    // Note: This is a simplification. DDB has complex speed rules (overrides, sets, etc.)
+    // We will assume walking speed + simple bonuses for now.
+    
+    const baseSpeed = data.race.weightSpeeds?.normal?.walk || 30;
+    
+    const speedBonuses = allModifiers
+      .filter(m => m.type === 'bonus' && (m.subType === 'speed' || m.subType === 'unarmored-movement'))
+      .reduce((acc, m) => acc + (m.value || 0), 0);
+
+    const speedVal = baseSpeed + speedBonuses;
+    const speed = `${speedVal} ft.`;
+
+    console.log("initiative", initiative);
+    console.log("speed", speed);
     return {
       name: data.name,
       race: data.race.fullName,
@@ -260,6 +298,8 @@ export class Character2Service {
       avatar: avatar,
       hp: { current: currentHp, max: maxHp, temp: tempHp },
       ac: ac,
+      speed: speed,
+      initiative: initiative,
       classes: classes,
       stats: stats,
       senses: senses

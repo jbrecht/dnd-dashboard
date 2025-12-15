@@ -276,6 +276,28 @@
   }
 }
 
+.movement-stats {
+  display: flex;
+  gap: 1.0rem;
+  align-items: center;
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.9rem;
+    color: white;
+    font-weight: 600;
+
+    mat-icon {
+      font-size: 1.1rem;
+      width: 1.1rem;
+      height: 1.1rem;
+      color: white;
+    }
+  }
+}
+
 .hp-container {
   text-align: right;
   min-width: 80px;

@@ -176,6 +176,8 @@ export class DashboardComponent implements OnInit {
       stats: [],
       avatarUrl: '',
       senses: { perception: 10, investigation: 10, insight: 10, special: [] },
+      speed: '',
+      initiative: 0,
       isLoading: true
     };
     this.characters.push(placeholder);
@@ -229,6 +231,8 @@ export class DashboardComponent implements OnInit {
       })),
       hitPoints: parsed.hp,
       armorClass: parsed.ac,
+      speed: parsed.speed,
+      initiative: parsed.initiative,
       avatarUrl: parsed.avatar,
       stats: [
         { id: 1, name: 'STR', value: parsed.stats.str },
