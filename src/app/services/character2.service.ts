@@ -65,21 +65,22 @@ export class Character2Service {
   private http = inject(HttpClient);
 
   getCharacter(characterId: string): Observable<ParsedCharacter> {
-    const targetUrl = `https://character-service.dndbeyond.com/character/v5/character/${characterId}`;
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+      const timestamp = new Date().getTime();
+      // add timestamp to url to force fresh fetch
+      const targetUrl = `https://character-service.dndbeyond.com/character/v5/character/${characterId}?t=${timestamp}`;
+      const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
 
-    return this.http.get<any>(proxyUrl).pipe(
-      map(response => {
-        if (!response || !response.data) {
-          throw new Error("Invalid Data Structure");
-        }
-        return this.parseCharacter(response.data);
-      })
-    );
+      return this.http.get<any>(proxyUrl).pipe(
+        map(response => {
+          if (!response || !response.data) {
+            throw new Error("Invalid Data Structure");
+          }
+          return this.parseCharacter(response.data);
+        })
+      );
   }
 
   private parseCharacter(data: DDBCharacterData): ParsedCharacter {
-    
     // --- 1. Attributes (Stats) Calculation ---
     const getStat = (id: number) => {
       const override = data.overrideStats.find(s => s.id === id)?.value;
