@@ -19,8 +19,11 @@
     <div class="card-header">
       <h2>{{ character.name }}</h2>
       <p class="subtitle">{{ character.race.fullName }}</p>
-      <div class="classes-list">
-        <div class="class-chip" *ngFor="let cls of character.classes">
+      <div class="classes-list" [class.compact-mode]="character.classes.length > 2">
+        <div
+          class="class-chip"
+          *ngFor="let cls of character.classes"
+          [matTooltip]="getClassTooltip(cls)">
           {{ cls.definition.name }}
           <span *ngIf="cls.subclassDefinition" class="subclass-text"
             >({{ cls.subclassDefinition.name }})</span

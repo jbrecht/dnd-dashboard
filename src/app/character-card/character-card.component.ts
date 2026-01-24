@@ -61,4 +61,9 @@ export class CharacterCardComponent {
   refresh() {
     this.refreshRequest.emit(this.character.id);
   }
+
+  getClassTooltip(cls: any): string {
+    const subclassName = cls.subclassDefinition ? ` (${cls.subclassDefinition.name})` : '';
+    return `${cls.definition.name}${subclassName} ${cls.level}`;
+  }
 }
