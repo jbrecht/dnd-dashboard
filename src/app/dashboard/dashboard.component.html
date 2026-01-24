@@ -18,6 +18,13 @@
       </button>
       <button
         mat-icon-button
+        (click)="refreshCharacters()"
+        class="reload-all icon-btn"
+        [attr.aria-label]="'Reload all characters'">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <button
+        mat-icon-button
         *ngIf="!showInput"
         (click)="toggleInput()"
         class="add-btn icon-btn"
