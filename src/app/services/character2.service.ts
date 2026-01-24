@@ -2,6 +2,13 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, from, map } from 'rxjs';
 
+export interface Skill {
+  name: string;
+  ability: string;
+  proficiency: 'none' | 'proficient' | 'expert';
+  modifier: number;
+}
+
 export interface ParsedCharacter {
   name: string;
   race: string;
@@ -32,6 +39,7 @@ export interface ParsedCharacter {
     insight: number;
     special: { name: string; value: string; icon: string }[];
   };
+  skills: Skill[];
 }
 
 interface DDBModifier {
@@ -57,6 +65,7 @@ interface DDBCharacterData {
   bonusHitPoints: number;
   removedHitPoints: number;
   temporaryHitPoints: number;
+  characterValues: any[];
   inventory: any[];
   frameAvatarUrl: string;
   avatarUrl: string;
@@ -117,7 +126,14 @@ export class Character2Service {
       const sumModifiers = (group: DDBModifier[]) => {
         if (!group) return 0;
         return group
-          .filter(m => m.entityId === id && m.type === 'bonus')
+          .filter(
+            m =>
+              m.entityId === id &&
+              m.type === 'bonus' &&
+              !['miscellaneous-bonus', 'bonus', 'magic'].includes(m.subType) &&
+              !m.subType.includes('efficiency') &&
+              !this.isSkill(m.subType)
+          )
           .reduce((acc, m) => acc + (m.value || 0), 0);
       };
 
@@ -273,7 +289,77 @@ export class Character2Service {
       return !duplicate;
     });
 
-    // --- 5. Final Object ---
+    // --- 5. Skills Calculation ---
+    interface SkillDef {
+      name: string;
+      ability: string;
+      mod: number;
+      id: number;
+    }
+    const skillDefs: SkillDef[] = [
+      { name: 'Acrobatics', ability: 'DEX', mod: stats.dexMod, id: 3 },
+      { name: 'Animal Handling', ability: 'WIS', mod: stats.wisMod, id: 11 },
+      { name: 'Arcana', ability: 'INT', mod: stats.intMod, id: 6 },
+      { name: 'Athletics', ability: 'STR', mod: stats.strMod, id: 2 },
+      { name: 'Deception', ability: 'CHA', mod: stats.chaMod, id: 16 },
+      { name: 'History', ability: 'INT', mod: stats.intMod, id: 7 },
+      { name: 'Insight', ability: 'WIS', mod: stats.wisMod, id: 12 },
+      { name: 'Intimidation', ability: 'CHA', mod: stats.chaMod, id: 17 },
+      { name: 'Investigation', ability: 'INT', mod: stats.intMod, id: 8 },
+      { name: 'Medicine', ability: 'WIS', mod: stats.wisMod, id: 13 },
+      { name: 'Nature', ability: 'INT', mod: stats.intMod, id: 9 },
+      { name: 'Perception', ability: 'WIS', mod: stats.wisMod, id: 14 },
+      { name: 'Performance', ability: 'CHA', mod: stats.chaMod, id: 18 },
+      { name: 'Persuasion', ability: 'CHA', mod: stats.chaMod, id: 19 },
+      { name: 'Religion', ability: 'INT', mod: stats.intMod, id: 10 },
+      { name: 'Sleight of Hand', ability: 'DEX', mod: stats.dexMod, id: 4 },
+      { name: 'Stealth', ability: 'DEX', mod: stats.dexMod, id: 5 },
+      { name: 'Survival', ability: 'WIS', mod: stats.wisMod, id: 15 },
+    ];
+
+    const skills: Skill[] = skillDefs.map(def => {
+      const skillSlug = def.name.toLowerCase().replace(/ /g, '-');
+      let modifier = def.mod;
+      let proficiency: 'none' | 'proficient' | 'expert' = 'none';
+
+      // Proficiency / Expertise
+      const prof = allModifiers.find(m => m.type === 'proficiency' && m.subType === skillSlug);
+      const expert = allModifiers.find(m => m.type === 'expertise' && m.subType === skillSlug);
+
+      if (expert) {
+        proficiency = 'expert';
+        modifier += proficiencyBonus * 2;
+      } else if (prof) {
+        proficiency = 'proficient';
+        modifier += proficiencyBonus;
+      }
+
+      // Bonus
+      // DDB: type: 'bonus', subType: 'skills' (all skills?) or specific skill subType
+      // Sometimes subType is 'stealth'
+      const bonuses = allModifiers
+        .filter(m => m.type === 'bonus' && m.subType === skillSlug)
+        .reduce((acc, m) => acc + (m.value || 0), 0);
+
+      modifier += bonuses;
+
+      // Overrides (Skill Misc Bonus - TypeId 24)
+      const userOverride = data.characterValues?.find(
+        cv => cv.typeId === 24 && parseInt(cv.valueId) === def.id
+      );
+      if (userOverride) {
+        modifier += Number(userOverride.value) || 0;
+      }
+
+      return {
+        name: def.name,
+        ability: def.ability,
+        proficiency,
+        modifier,
+      };
+    });
+
+    // --- 6. Final Object ---
     const avatar =
       data.avatarUrl ||
       data.decorations?.avatarUrl ||
@@ -323,6 +409,31 @@ export class Character2Service {
       classes: classes,
       stats: stats,
       senses: senses,
+      skills: skills,
     };
+  }
+
+  private isSkill(subType: string): boolean {
+    const skills = [
+      'acrobatics',
+      'animal-handling',
+      'arcana',
+      'athletics',
+      'deception',
+      'history',
+      'insight',
+      'intimidation',
+      'investigation',
+      'medicine',
+      'nature',
+      'perception',
+      'performance',
+      'persuasion',
+      'religion',
+      'sleight-of-hand',
+      'stealth',
+      'survival',
+    ];
+    return skills.includes(subType);
   }
 }
