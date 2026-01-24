@@ -257,4 +257,9 @@ export class DashboardComponent implements OnInit {
   trackById(index: number, item: Character): number {
     return item.id;
   }
+
+  openHelp() {
+    // open youtube help video
+    window.open('https://youtu.be/69HHAi1fc2U', '_blank');
+  }
 }

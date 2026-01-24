@@ -311,8 +311,6 @@ export class Character2Service {
     const speedVal = baseSpeed + speedBonuses;
     const speed = `${speedVal} ft.`;
 
-    console.log('initiative', initiative);
-    console.log('speed', speed);
     return {
       name: data.name,
       race: data.race.fullName,

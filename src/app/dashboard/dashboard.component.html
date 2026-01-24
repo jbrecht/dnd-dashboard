@@ -4,8 +4,15 @@
     <div class="top-right-controls">
       <button
         mat-icon-button
+        (click)="openHelp()"
+        class="help icon-btn"
+        [attr.aria-label]="'View help'">
+        <mat-icon>help</mat-icon>
+      </button>
+      <button
+        mat-icon-button
         (click)="toggleTheme()"
-        class="theme-toggle"
+        class="theme-toggle icon-btn"
         [attr.aria-label]="'Toggle theme'">
         <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
       </button>
@@ -13,7 +20,7 @@
         mat-icon-button
         *ngIf="!showInput"
         (click)="toggleInput()"
-        class="add-btn"
+        class="add-btn icon-btn"
         [attr.aria-label]="'Show input'">
         <mat-icon>person_add</mat-icon>
       </button>
