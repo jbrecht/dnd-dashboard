@@ -45,7 +45,9 @@ body {
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 /* Fix for Tailwind preflight affecting Material icons */

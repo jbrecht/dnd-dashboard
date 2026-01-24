@@ -23,10 +23,10 @@ import { Character } from '../models/character.model';
     MatButtonModule,
     MatButtonModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   templateUrl: './character-card.component.html',
-  styleUrl: './character-card.component.scss'
+  styleUrl: './character-card.component.scss',
 })
 export class CharacterCardComponent {
   @Input() character!: Character;

@@ -2,10 +2,19 @@
   <div class="dashboard-content">
     <!-- Top Right Controls -->
     <div class="top-right-controls">
-      <button mat-icon-button (click)="toggleTheme()" class="theme-toggle" [attr.aria-label]="'Toggle theme'">
+      <button
+        mat-icon-button
+        (click)="toggleTheme()"
+        class="theme-toggle"
+        [attr.aria-label]="'Toggle theme'">
         <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
       </button>
-      <button mat-icon-button *ngIf="!showInput" (click)="toggleInput()" class="add-btn" [attr.aria-label]="'Show input'">
+      <button
+        mat-icon-button
+        *ngIf="!showInput"
+        (click)="toggleInput()"
+        class="add-btn"
+        [attr.aria-label]="'Show input'">
         <mat-icon>person_add</mat-icon>
       </button>
     </div>
@@ -13,27 +22,40 @@
     <!-- Input Card (Centered) -->
     <div class="input-card-container" *ngIf="showInput">
       <div class="input-card">
-        <button mat-icon-button (click)="toggleInput()" class="close-btn" [attr.aria-label]="'Hide input'">
+        <button
+          mat-icon-button
+          (click)="toggleInput()"
+          class="close-btn"
+          [attr.aria-label]="'Hide input'">
           <mat-icon>close</mat-icon>
         </button>
         <div class="input-container">
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Character ID</mat-label>
-            <input matInput [(ngModel)]="characterInput" placeholder="123456" (keyup.enter)="importCharacter()">
+            <input
+              matInput
+              [(ngModel)]="characterInput"
+              placeholder="123456"
+              (keyup.enter)="importCharacter()" />
             <mat-icon matPrefix class="mr-2 text-gray-400">tag</mat-icon>
-            <button mat-icon-button matSuffix (click)="importCharacter()" [attr.aria-label]="'Import character'" color="primary">
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="importCharacter()"
+              [attr.aria-label]="'Import character'"
+              color="primary">
               <mat-icon>download</mat-icon>
             </button>
             <mat-hint *ngIf="!error">Enter DnD Beyond Character ID</mat-hint>
-            <mat-hint *ngIf="error" style="color: #ef4444;">{{ error }}</mat-hint>
+            <mat-hint *ngIf="error" style="color: #ef4444">{{ error }}</mat-hint>
           </mat-form-field>
         </div>
       </div>
     </div>
 
     <div class="character-grid">
-      <app-character-card 
-        *ngFor="let char of characters; trackBy: trackById" 
+      <app-character-card
+        *ngFor="let char of characters; trackBy: trackById"
         [character]="char"
         (deleteRequest)="removeCharacter(char.id)"
         (refreshRequest)="refreshCharacter(char.id)"

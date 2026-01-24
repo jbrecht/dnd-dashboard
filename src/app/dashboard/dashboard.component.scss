@@ -2,12 +2,12 @@
   min-height: 100vh;
   /* background-color: #f3f4f6; Removed to let body bg show */
   padding: 1rem;
-  
+
   @media (min-width: 640px) {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
-  
+
   @media (min-width: 1024px) {
     padding-left: 2rem;
     padding-right: 2rem;
@@ -28,9 +28,10 @@
   gap: 0.5rem;
   z-index: 100;
 
-  .theme-toggle, .add-btn {
+  .theme-toggle,
+  .add-btn {
     color: var(--text-secondary);
-    
+
     &:hover {
       color: var(--text-color);
     }
@@ -52,7 +53,10 @@
   width: 30rem;
   max-width: 600px;
   border: 1px solid var(--border-color);
-  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s,
+    box-shadow 0.3s;
   position: relative;
 
   .close-btn {
@@ -61,7 +65,7 @@
     right: 0.5rem;
     color: var(--text-secondary);
     z-index: 10;
-    
+
     &:hover {
       color: var(--text-color);
     }
@@ -73,17 +77,17 @@
     gap: 1rem;
     justify-content: center;
     padding-top: 1rem;
-    margin: 0 2rem
+    margin: 0 2rem;
   }
 
   mat-form-field {
     width: 100%;
     max-width: 300px;
-    
+
     ::ng-deep .mat-mdc-text-field-wrapper {
       background-color: var(--input-bg) !important;
     }
-    
+
     ::ng-deep .mat-mdc-input-element {
       color: var(--text-color) !important;
     }
@@ -91,7 +95,7 @@
     ::ng-deep .mat-mdc-form-field-label {
       color: var(--text-secondary) !important;
     }
-    
+
     ::ng-deep .mat-mdc-form-field-hint {
       color: var(--text-secondary) !important;
     }
@@ -108,7 +112,7 @@
   .error-content {
     display: flex;
     align-items: center;
-    
+
     mat-icon {
       margin-right: 0.5rem;
     }

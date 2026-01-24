@@ -26,7 +26,7 @@ interface CachedCharacter {
     MatInputModule,
     MatFormFieldModule,
     FormsModule,
-    CharacterCardComponent
+    CharacterCardComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
@@ -34,17 +34,20 @@ interface CachedCharacter {
     trigger('cardAnimation', [
       transition(':leave', [
         style({ opacity: 1, transform: 'scale(1)', height: '*' }),
-        animate('300ms ease-out', style({ opacity: 0, transform: 'scale(0.8)', height: 0, margin: 0 }))
-      ])
-    ])
-  ]
+        animate(
+          '300ms ease-out',
+          style({ opacity: 0, transform: 'scale(0.8)', height: 0, margin: 0 })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class DashboardComponent implements OnInit {
   characterInput = '';
   characters: Character[] = [];
   loading = false;
   error = '';
-  
+
   private readonly STORAGE_KEY = 'dnd-dashboard';
 
   constructor(private characterService: Character2Service) {}
@@ -101,20 +104,20 @@ export class DashboardComponent implements OnInit {
       next: (parsed: ParsedCharacter) => {
         const updated = this.mapParsedToCharacter(id.toString(), parsed);
         updated.isLoading = false;
-        
+
         const index = this.characters.findIndex(c => c.id === id);
         if (index !== -1) {
           this.characters[index] = updated;
           this.saveCharacters();
         }
       },
-      error: (err) => {
+      error: err => {
         console.error(`Failed to refresh character ${id}`, err);
         const index = this.characters.findIndex(c => c.id === id);
         if (index !== -1) {
           this.characters[index].isLoading = false;
         }
-      }
+      },
     });
   }
 
@@ -139,7 +142,7 @@ export class DashboardComponent implements OnInit {
     const cache: CachedCharacter[] = this.characters.map(c => ({
       input: c.id.toString(),
       character: c,
-      lastUpdated: Date.now()
+      lastUpdated: Date.now(),
     }));
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cache));
   }
@@ -178,7 +181,7 @@ export class DashboardComponent implements OnInit {
       senses: { perception: 10, investigation: 10, insight: 10, special: [] },
       speed: '',
       initiative: 0,
-      isLoading: true
+      isLoading: true,
     };
     this.characters.push(placeholder);
 
@@ -186,14 +189,14 @@ export class DashboardComponent implements OnInit {
       next: (parsed: ParsedCharacter) => {
         const character: Character = this.mapParsedToCharacter(idStr, parsed);
         character.isLoading = false;
-        
+
         const index = this.characters.findIndex(c => c.id === id);
         if (index !== -1) {
           this.characters[index] = character;
           this.saveCharacters();
         }
       },
-      error: (err) => {
+      error: err => {
         console.error(err);
         let message = 'Failed to load character';
         if (err.status === 404) {
@@ -207,7 +210,7 @@ export class DashboardComponent implements OnInit {
         if (index !== -1) {
           this.characters.splice(index, 1);
         }
-      }
+      },
     });
   }
 
@@ -227,7 +230,7 @@ export class DashboardComponent implements OnInit {
         level: c.level,
         definition: { name: c.name },
         subclassDefinition: c.subclass ? { name: c.subclass } : undefined,
-        isStartingClass: c.isStartingClass
+        isStartingClass: c.isStartingClass,
       })),
       hitPoints: parsed.hp,
       armorClass: parsed.ac,
@@ -240,9 +243,9 @@ export class DashboardComponent implements OnInit {
         { id: 3, name: 'CON', value: parsed.stats.con },
         { id: 4, name: 'INT', value: parsed.stats.int },
         { id: 5, name: 'WIS', value: parsed.stats.wis },
-        { id: 6, name: 'CHA', value: parsed.stats.cha }
+        { id: 6, name: 'CHA', value: parsed.stats.cha },
       ],
-      senses: parsed.senses
+      senses: parsed.senses,
     };
   }
 

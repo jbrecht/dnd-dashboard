@@ -13,12 +13,18 @@ export interface ParsedCharacter {
   initiative: number;
   classes: { name: string; level: number; isStartingClass: boolean; subclass?: string }[];
   stats: {
-    str: number; strMod: number;
-    dex: number; dexMod: number;
-    con: number; conMod: number;
-    int: number; intMod: number;
-    wis: number; wisMod: number;
-    cha: number; chaMod: number;
+    str: number;
+    strMod: number;
+    dex: number;
+    dexMod: number;
+    con: number;
+    conMod: number;
+    int: number;
+    intMod: number;
+    wis: number;
+    wisMod: number;
+    cha: number;
+    chaMod: number;
   };
   senses: {
     perception: number;
@@ -54,14 +60,14 @@ interface DDBCharacterData {
   inventory: any[];
   frameAvatarUrl: string;
   avatarUrl: string;
-  classes: { 
-    level: number; 
-    definition: { name: string }; 
+  classes: {
+    level: number;
+    definition: { name: string };
     subclassDefinition?: { name: string };
-    isStartingClass: boolean 
+    isStartingClass: boolean;
   }[];
   name: string;
-  race: { 
+  race: {
     fullName: string;
     weightSpeeds?: {
       normal: {
@@ -70,32 +76,32 @@ interface DDBCharacterData {
         burrow: number;
         swim: number;
         climb: number;
-      }
+      };
     };
   };
   decorations?: { avatarUrl: string };
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class Character2Service {
   private http = inject(HttpClient);
 
   getCharacter(characterId: string): Observable<ParsedCharacter> {
-      const timestamp = new Date().getTime();
-      // add timestamp to url to force fresh fetch
-      const targetUrl = `https://character-service.dndbeyond.com/character/v5/character/${characterId}?t=${timestamp}`;
-      const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+    const timestamp = new Date().getTime();
+    // add timestamp to url to force fresh fetch
+    const targetUrl = `https://character-service.dndbeyond.com/character/v5/character/${characterId}?t=${timestamp}`;
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
 
-      return this.http.get<any>(proxyUrl).pipe(
-        map(response => {
-          if (!response || !response.data) {
-            throw new Error("Invalid Data Structure");
-          }
-          return this.parseCharacter(response.data);
-        })
-      );
+    return this.http.get<any>(proxyUrl).pipe(
+      map(response => {
+        if (!response || !response.data) {
+          throw new Error('Invalid Data Structure');
+        }
+        return this.parseCharacter(response.data);
+      })
+    );
   }
 
   private parseCharacter(data: DDBCharacterData): ParsedCharacter {
@@ -126,12 +132,18 @@ export class Character2Service {
     const getMod = (val: number) => Math.floor((val - 10) / 2);
 
     const stats = {
-      str: getStat(1), strMod: 0,
-      dex: getStat(2), dexMod: 0,
-      con: getStat(3), conMod: 0,
-      int: getStat(4), intMod: 0,
-      wis: getStat(5), wisMod: 0,
-      cha: getStat(6), chaMod: 0,
+      str: getStat(1),
+      strMod: 0,
+      dex: getStat(2),
+      dexMod: 0,
+      con: getStat(3),
+      conMod: 0,
+      int: getStat(4),
+      intMod: 0,
+      wis: getStat(5),
+      wisMod: 0,
+      cha: getStat(6),
+      chaMod: 0,
     };
 
     stats.strMod = getMod(stats.str);
@@ -143,17 +155,21 @@ export class Character2Service {
 
     // --- 2. Hit Points ---
     const totalLevel = data.classes.reduce((sum, cls) => sum + cls.level, 0);
-    const maxHp = (data.baseHitPoints || 0) + (data.bonusHitPoints || 0) + (stats.conMod * totalLevel);
+    const maxHp =
+      (data.baseHitPoints || 0) + (data.bonusHitPoints || 0) + stats.conMod * totalLevel;
     const currentHp = maxHp - (data.removedHitPoints || 0);
     const tempHp = data.temporaryHitPoints || 0;
 
     // --- 3. Armor Class ---
     let ac = 10 + stats.dexMod;
-    const bodyArmor = data.inventory.find(i => 
-      i.equipped && i.definition.filterType === 'Armor' && [1, 2, 3].includes(i.definition.armorTypeId || 0)
+    const bodyArmor = data.inventory.find(
+      i =>
+        i.equipped &&
+        i.definition.filterType === 'Armor' &&
+        [1, 2, 3].includes(i.definition.armorTypeId || 0)
     );
-    const shield = data.inventory.find(i => 
-      i.equipped && i.definition.filterType === 'Armor' && i.definition.armorTypeId === 4
+    const shield = data.inventory.find(
+      i => i.equipped && i.definition.filterType === 'Armor' && i.definition.armorTypeId === 4
     );
 
     if (bodyArmor) {
@@ -164,7 +180,7 @@ export class Character2Service {
       else if (type === 3) ac = armorBase;
     }
 
-    if (shield) ac += (shield.definition.armorClass || 2);
+    if (shield) ac += shield.definition.armorClass || 2;
 
     // --- 4. Senses Calculation ---
     // Proficiency Bonus: ceil(level / 4) + 1
@@ -177,7 +193,7 @@ export class Character2Service {
         ...(data.modifiers.background || []),
         ...(data.modifiers.feat || []),
         ...(data.modifiers.item || []),
-        ...(data.modifiers.condition || [])
+        ...(data.modifiers.condition || []),
       ];
     };
 
@@ -191,19 +207,17 @@ export class Character2Service {
       // Look for 'proficiency' or 'expertise' type with subType matching skill (e.g., 'perception')
       // Note: DDB uses 'perception', 'investigation', 'insight' as subTypes usually.
       // Sometimes subType is 'perception-skill' or just 'perception'.
-      
+
       const skillSlug = skillName.toLowerCase().replace(' ', '-'); // e.g. 'perception'
-      
-      const proficiency = allModifiers.find(m => 
-        m.type === 'proficiency' && m.subType === skillSlug
-      );
-      
-      const expertise = allModifiers.find(m => 
-        m.type === 'expertise' && m.subType === skillSlug
+
+      const proficiency = allModifiers.find(
+        m => m.type === 'proficiency' && m.subType === skillSlug
       );
 
+      const expertise = allModifiers.find(m => m.type === 'expertise' && m.subType === skillSlug);
+
       if (expertise) {
-        score += (proficiencyBonus * 2);
+        score += proficiencyBonus * 2;
       } else if (proficiency) {
         score += proficiencyBonus;
       }
@@ -211,9 +225,12 @@ export class Character2Service {
       // 3. Bonuses
       // type: 'bonus', subType: 'perception' (or 'passive-perception')
       const bonuses = allModifiers
-        .filter(m => m.type === 'bonus' && (m.subType === skillSlug || m.subType === `passive-${skillSlug}`))
+        .filter(
+          m =>
+            m.type === 'bonus' && (m.subType === skillSlug || m.subType === `passive-${skillSlug}`)
+        )
         .reduce((acc, m) => acc + (m.value || 0), 0);
-      
+
       score += bonuses;
 
       return score;
@@ -223,7 +240,7 @@ export class Character2Service {
       perception: getSkillScore('perception', stats.wisMod),
       investigation: getSkillScore('investigation', stats.intMod),
       insight: getSkillScore('insight', stats.wisMod),
-      special: [] as { name: string; value: string; icon: string }[]
+      special: [] as { name: string; value: string; icon: string }[],
     };
 
     // Special Senses (Darkvision, etc.)
@@ -244,10 +261,10 @@ export class Character2Service {
         return {
           name: name,
           value: value,
-          icon: getSenseIcon(name)
+          icon: getSenseIcon(name),
         };
       });
-    
+
     // Deduplicate by name
     const seen = new Set();
     senses.special = specialSenses.filter(s => {
@@ -257,13 +274,16 @@ export class Character2Service {
     });
 
     // --- 5. Final Object ---
-    const avatar = data.avatarUrl || data.decorations?.avatarUrl || 'https://www.dndbeyond.com/content/skins/waterdeep/images/characters/default-avatar.png';
+    const avatar =
+      data.avatarUrl ||
+      data.decorations?.avatarUrl ||
+      'https://www.dndbeyond.com/content/skins/waterdeep/images/characters/default-avatar.png';
 
     const classes = data.classes.map(cls => ({
       name: cls.definition.name,
       level: cls.level,
       isStartingClass: cls.isStartingClass,
-      subclass: cls.subclassDefinition?.name
+      subclass: cls.subclassDefinition?.name,
     }));
 
     // --- 6. Initiative ---
@@ -279,18 +299,20 @@ export class Character2Service {
     // Add 'bonus' 'speed' or 'unarmored-movement' (often handled as bonus speed)
     // Note: This is a simplification. DDB has complex speed rules (overrides, sets, etc.)
     // We will assume walking speed + simple bonuses for now.
-    
+
     const baseSpeed = data.race.weightSpeeds?.normal?.walk || 30;
-    
+
     const speedBonuses = allModifiers
-      .filter(m => m.type === 'bonus' && (m.subType === 'speed' || m.subType === 'unarmored-movement'))
+      .filter(
+        m => m.type === 'bonus' && (m.subType === 'speed' || m.subType === 'unarmored-movement')
+      )
       .reduce((acc, m) => acc + (m.value || 0), 0);
 
     const speedVal = baseSpeed + speedBonuses;
     const speed = `${speedVal} ft.`;
 
-    console.log("initiative", initiative);
-    console.log("speed", speed);
+    console.log('initiative', initiative);
+    console.log('speed', speed);
     return {
       name: data.name,
       race: data.race.fullName,
@@ -302,7 +324,7 @@ export class Character2Service {
       initiative: initiative,
       classes: classes,
       stats: stats,
-      senses: senses
+      senses: senses,
     };
   }
 }
