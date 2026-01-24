@@ -1,0 +1,5 @@
+dist
+node_modules
+.angular
+.git
+package-lock.json
