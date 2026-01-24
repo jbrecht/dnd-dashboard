@@ -16,6 +16,14 @@ export interface Character {
     special: SpecialSense[];
   };
   isLoading?: boolean;
+  skills: Skill[];
+}
+
+export interface Skill {
+  name: string;
+  ability: string;
+  proficiency: 'none' | 'proficient' | 'expert';
+  modifier: number;
 }
 
 export interface SpecialSense {

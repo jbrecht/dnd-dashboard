@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Character } from '../models/character.model';
+import { CharacterSkillsComponent } from '../character-skills/character-skills.component';
 
 @Component({
   selector: 'app-character-card',
@@ -23,7 +24,9 @@ import { Character } from '../models/character.model';
     MatButtonModule,
     MatButtonModule,
     MatIconModule,
+    MatIconModule,
     MatTooltipModule,
+    CharacterSkillsComponent,
   ],
   templateUrl: './character-card.component.html',
   styleUrl: './character-card.component.scss',
@@ -32,6 +35,8 @@ export class CharacterCardComponent {
   @Input() character!: Character;
   @Output() deleteRequest = new EventEmitter<number>();
   @Output() refreshRequest = new EventEmitter<number>();
+
+  showSkills = false;
 
   get totalLevel(): number {
     return this.character.classes.reduce((acc, curr) => acc + curr.level, 0);

@@ -90,6 +90,14 @@
       }
     }
 
+    .skills-btn {
+      @extend .card-btn;
+      right: 6.5rem;
+      &:hover {
+        background: rgba(16, 185, 129, 0.8);
+      }
+    }
+
     .delete-btn {
       @extend .card-btn;
       right: 0.5rem;
@@ -395,5 +403,10 @@
         }
       }
     }
+  }
+
+  app-character-skills {
+    flex: 1;
+    overflow: hidden;
   }
 }

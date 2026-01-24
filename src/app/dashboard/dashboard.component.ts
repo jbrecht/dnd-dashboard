@@ -179,6 +179,7 @@ export class DashboardComponent implements OnInit {
       stats: [],
       avatarUrl: '',
       senses: { perception: 10, investigation: 10, insight: 10, special: [] },
+      skills: [],
       speed: '',
       initiative: 0,
       isLoading: true,
@@ -245,7 +246,13 @@ export class DashboardComponent implements OnInit {
         { id: 5, name: 'WIS', value: parsed.stats.wis },
         { id: 6, name: 'CHA', value: parsed.stats.cha },
       ],
-      senses: parsed.senses,
+      senses: {
+        perception: parsed.senses.perception,
+        investigation: parsed.senses.investigation,
+        insight: parsed.senses.insight,
+        special: parsed.senses.special,
+      },
+      skills: parsed.skills,
     };
   }
 

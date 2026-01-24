@@ -2,12 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, from, map } from 'rxjs';
 
-export interface Skill {
-  name: string;
-  ability: string;
-  proficiency: 'none' | 'proficient' | 'expert';
-  modifier: number;
-}
+import { Character, Skill } from '../models/character.model';
 
 export interface ParsedCharacter {
   name: string;

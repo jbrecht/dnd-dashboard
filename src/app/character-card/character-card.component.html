@@ -2,119 +2,141 @@
   <div class="loading-overlay" *ngIf="character.isLoading">
     <mat-spinner diameter="50"></mat-spinner>
   </div>
-  <div class="card-top">
-    <div class="avatar-background">
-      <img [src]="character.avatarUrl || 'assets/placeholder.png'" alt="{{ character.name }}" />
-      <div class="avatar-overlay"></div>
-    </div>
 
-    <button mat-icon-button class="refresh-btn" (click)="refresh()" aria-label="Refresh character">
-      <mat-icon>refresh</mat-icon>
-    </button>
-
-    <button mat-icon-button class="delete-btn" (click)="delete()" aria-label="Delete character">
-      <mat-icon>delete</mat-icon>
-    </button>
-
-    <div class="card-header">
-      <h2>{{ character.name }}</h2>
-      <p class="subtitle">{{ character.race.fullName }}</p>
-      <div class="classes-list" [class.compact-mode]="character.classes.length > 2">
-        <div
-          class="class-chip"
-          *ngFor="let cls of character.classes"
-          [matTooltip]="getClassTooltip(cls)">
-          {{ cls.definition.name }}
-          <span *ngIf="cls.subclassDefinition" class="subclass-text"
-            >({{ cls.subclassDefinition.name }})</span
-          >
-          <span class="level-badge">{{ cls.level }}</span>
-        </div>
+  <ng-container *ngIf="!showSkills">
+    <div class="card-top">
+      <div class="avatar-background">
+        <img [src]="character.avatarUrl || 'assets/placeholder.png'" alt="{{ character.name }}" />
+        <div class="avatar-overlay"></div>
       </div>
-    </div>
 
-    <div class="card-footer-info">
-      <div class="passives-container" *ngIf="character.senses">
-        <div class="passives-row">
-          <div class="passive-item" matTooltip="Passive Perception">
-            <mat-icon>visibility</mat-icon>
-            <span>{{ character.senses.perception }}</span>
-          </div>
-          <div class="passive-item" matTooltip="Passive Investigation">
-            <mat-icon>search</mat-icon>
-            <span>{{ character.senses.investigation }}</span>
-          </div>
-          <div class="passive-item" matTooltip="Passive Insight">
-            <mat-icon>psychology</mat-icon>
-            <span>{{ character.senses.insight }}</span>
-          </div>
+      <div class="top-controls">
+        <button
+          mat-icon-button
+          class="skills-btn"
+          (click)="showSkills = true"
+          aria-label="View skills">
+          <mat-icon>school</mat-icon>
+        </button>
 
-          <!-- Special Senses -->
+        <button
+          mat-icon-button
+          class="refresh-btn"
+          (click)="refresh()"
+          aria-label="Refresh character">
+          <mat-icon>refresh</mat-icon>
+        </button>
+
+        <button mat-icon-button class="delete-btn" (click)="delete()" aria-label="Delete character">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <div class="card-header">
+        <h2>{{ character.name }}</h2>
+        <p class="subtitle">{{ character.race.fullName }}</p>
+        <div class="classes-list" [class.compact-mode]="character.classes.length > 2">
           <div
-            class="passive-item"
-            *ngFor="let sense of character.senses.special"
-            [matTooltip]="sense.name + ' ' + sense.value">
-            <mat-icon>{{ sense.icon }}</mat-icon>
-            <span>{{ sense.value.replace(' ft.', '') }}</span>
+            class="class-chip"
+            *ngFor="let cls of character.classes"
+            [matTooltip]="getClassTooltip(cls)">
+            {{ cls.definition.name }}
+            <span *ngIf="cls.subclassDefinition" class="subclass-text"
+              >({{ cls.subclassDefinition.name }})</span
+            >
+            <span class="level-badge">{{ cls.level }}</span>
           </div>
         </div>
       </div>
 
-      <div class="combat-stats">
-        <div class="ac-container">
-          <div class="ac-value" matTooltip="Armor Class">
-            <mat-icon class="ac-shield">shield</mat-icon>
-            <span>{{ character.armorClass }}</span>
+      <div class="card-footer-info">
+        <div class="passives-container" *ngIf="character.senses">
+          <div class="passives-row">
+            <div class="passive-item" matTooltip="Passive Perception">
+              <mat-icon>visibility</mat-icon>
+              <span>{{ character.senses.perception }}</span>
+            </div>
+            <div class="passive-item" matTooltip="Passive Investigation">
+              <mat-icon>search</mat-icon>
+              <span>{{ character.senses.investigation }}</span>
+            </div>
+            <div class="passive-item" matTooltip="Passive Insight">
+              <mat-icon>psychology</mat-icon>
+              <span>{{ character.senses.insight }}</span>
+            </div>
+
+            <!-- Special Senses -->
+            <div
+              class="passive-item"
+              *ngFor="let sense of character.senses.special"
+              [matTooltip]="sense.name + ' ' + sense.value">
+              <mat-icon>{{ sense.icon }}</mat-icon>
+              <span>{{ sense.value.replace(' ft.', '') }}</span>
+            </div>
           </div>
         </div>
 
-        <div class="movement-stats">
-          <div class="stat-item" matTooltip="Initiative">
-            <mat-icon>timer</mat-icon>
-            <span>{{ character.initiative >= 0 ? '+' : '' }}{{ character.initiative }}</span>
+        <div class="combat-stats">
+          <div class="ac-container">
+            <div class="ac-value" matTooltip="Armor Class">
+              <mat-icon class="ac-shield">shield</mat-icon>
+              <span>{{ character.armorClass }}</span>
+            </div>
           </div>
-          <div class="stat-item" matTooltip="Speed">
-            <mat-icon>directions_run</mat-icon>
-            <span>{{ character.speed }}</span>
-          </div>
-        </div>
 
-        <div class="hp-container">
-          <div class="hp-values">
-            <span
-              class="temp"
-              *ngIf="character.hitPoints.temp > 0"
-              matTooltip="Temporary Hit Points"
-              >+{{ character.hitPoints.temp }}
-            </span>
-            <span class="current" matTooltip="Current Hit Points">{{
-              character.hitPoints.current
-            }}</span>
-            <span class="separator">/</span>
-            <span class="max" matTooltip="Maximum Hit Points">{{ character.hitPoints.max }}</span>
+          <div class="movement-stats">
+            <div class="stat-item" matTooltip="Initiative">
+              <mat-icon>timer</mat-icon>
+              <span>{{ character.initiative >= 0 ? '+' : '' }}{{ character.initiative }}</span>
+            </div>
+            <div class="stat-item" matTooltip="Speed">
+              <mat-icon>directions_run</mat-icon>
+              <span>{{ character.speed }}</span>
+            </div>
           </div>
-          <mat-progress-bar
-            mode="determinate"
-            [value]="(character.hitPoints.current / character.hitPoints.max) * 100"
-            class="hp-bar"
-            [class]="hpStatus"></mat-progress-bar>
+
+          <div class="hp-container">
+            <div class="hp-values">
+              <span
+                class="temp"
+                *ngIf="character.hitPoints.temp > 0"
+                matTooltip="Temporary Hit Points"
+                >+{{ character.hitPoints.temp }}
+              </span>
+              <span class="current" matTooltip="Current Hit Points">{{
+                character.hitPoints.current
+              }}</span>
+              <span class="separator">/</span>
+              <span class="max" matTooltip="Maximum Hit Points">{{ character.hitPoints.max }}</span>
+            </div>
+            <mat-progress-bar
+              mode="determinate"
+              [value]="(character.hitPoints.current / character.hitPoints.max) * 100"
+              class="hp-bar"
+              [class]="hpStatus"></mat-progress-bar>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="card-bottom">
-    <div class="stats-grid">
-      <div class="stat-box" *ngFor="let stat of character.stats">
-        <div class="stat-label">{{ stat.name }}</div>
-        <div class="stat-value">{{ stat.value }}</div>
-        <div
-          class="stat-mod"
-          [class.positive]="getModifier(stat.value) > 0"
-          [class.negative]="getModifier(stat.value) < 0">
-          {{ getModifierString(stat.value) }}
+    <div class="card-bottom">
+      <div class="stats-grid">
+        <div class="stat-box" *ngFor="let stat of character.stats">
+          <div class="stat-label">{{ stat.name }}</div>
+          <div class="stat-value">{{ stat.value }}</div>
+          <div
+            class="stat-mod"
+            [class.positive]="getModifier(stat.value) > 0"
+            [class.negative]="getModifier(stat.value) < 0">
+            {{ getModifierString(stat.value) }}
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </ng-container>
+
+  <app-character-skills
+    *ngIf="showSkills"
+    [character]="character"
+    (back)="showSkills = false"></app-character-skills>
 </div>

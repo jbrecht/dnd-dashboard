@@ -1,0 +1,32 @@
+<div class="skills-container">
+  <div class="skills-header">
+    <div class="header-content">
+      <h2>{{ character.name }}</h2>
+      <span class="subtitle">Skills</span>
+    </div>
+    <button mat-icon-button (click)="back.emit()" aria-label="Back to character card">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="skills-list">
+    <div
+      class="skill-item"
+      *ngFor="let skill of character.skills"
+      [class]="getProficiencyClass(skill.proficiency)">
+      <div class="skill-proficiency-icon">
+        <mat-icon
+          [matTooltip]="skill.proficiency | titlecase"
+          [class.filled]="skill.proficiency !== 'none'">
+          {{ getProficiencyIcon(skill.proficiency) }}
+        </mat-icon>
+      </div>
+      <div class="skill-name">
+        {{ skill.name }} <span class="skill-ability">({{ skill.ability }})</span>
+      </div>
+      <div class="skill-modifier">
+        {{ getModifierString(skill.modifier) }}
+      </div>
+    </div>
+  </div>
+</div>

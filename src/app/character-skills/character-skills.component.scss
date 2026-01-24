@@ -1,0 +1,139 @@
+.skills-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  box-sizing: border-box;
+  background: var(--card-bg, #fff);
+  color: var(--text-color, #000);
+}
+
+.skills-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+  .header-content {
+    h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--primary-color, #3f51b5);
+    }
+    .subtitle {
+      font-size: 0.875rem;
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+}
+
+.skills-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skill-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.03);
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  &.skill-proficient {
+    background: rgba(63, 81, 181, 0.08); /* Primary color tint */
+    font-weight: 500;
+  }
+
+  &.skill-expert {
+    background: rgba(63, 81, 181, 0.15); /* Stronger primary tint */
+    font-weight: 600;
+  }
+
+  .skill-proficiency-icon {
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.3);
+
+    .filled {
+      color: var(--primary-color, #3f51b5);
+    }
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .skill-name {
+    flex: 1;
+    font-size: 0.95rem;
+
+    .skill-ability {
+      font-size: 0.75rem;
+      color: rgba(0, 0, 0, 0.5);
+      margin-left: 4px;
+    }
+  }
+
+  .skill-modifier {
+    font-weight: bold;
+    min-width: 30px;
+    text-align: right;
+  }
+}
+
+// Dark mode adjustments (assuming a class on body or parent)
+:host-context(.dark-theme) {
+  .skills-container {
+    background: #424242;
+    color: #fff;
+  }
+
+  .skills-header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+    .header-content h2 {
+      color: #8c9eff;
+    } // Lighter primary
+    .header-content .subtitle {
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  .skill-item {
+    background: rgba(255, 255, 255, 0.05);
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    &.skill-proficient {
+      background: rgba(140, 158, 255, 0.15);
+    }
+    &.skill-expert {
+      background: rgba(140, 158, 255, 0.25);
+    }
+
+    .skill-proficiency-icon {
+      color: rgba(255, 255, 255, 0.3);
+      .filled {
+        color: #8c9eff;
+      }
+    }
+
+    .skill-name .skill-ability {
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+}
