@@ -7,11 +7,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Character, Skill } from '../models/character.model';
 
 @Component({
-  selector: 'app-character-skills',
-  standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatListModule, MatTooltipModule],
-  templateUrl: './character-skills.component.html',
-  styleUrls: ['./character-skills.component.scss'],
+    selector: 'app-character-skills',
+    imports: [CommonModule, MatButtonModule, MatIconModule, MatListModule, MatTooltipModule],
+    templateUrl: './character-skills.component.html',
+    styleUrls: ['./character-skills.component.scss']
 })
 export class CharacterSkillsComponent {
   @Input() character!: Character;

@@ -6,11 +6,10 @@ import { CharacterStatsComponent } from '../character-stats/character-stats.comp
 import { ViewMode } from '../dashboard/dashboard.component';
 
 @Component({
-  selector: 'app-character-card',
-  standalone: true,
-  imports: [CharacterSkillsComponent, CharacterStatsComponent],
-  templateUrl: './character-card.component.html',
-  styleUrl: './character-card.component.scss',
+    selector: 'app-character-card',
+    imports: [CharacterSkillsComponent, CharacterStatsComponent],
+    templateUrl: './character-card.component.html',
+    styleUrl: './character-card.component.scss'
 })
 export class CharacterCardComponent implements OnChanges {
   @Input() character!: Character;

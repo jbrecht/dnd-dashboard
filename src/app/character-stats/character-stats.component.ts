@@ -11,20 +11,19 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Character } from '../models/character.model';
 
 @Component({
-  selector: 'app-character-stats',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatChipsModule,
-    MatListModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule
-],
-  templateUrl: './character-stats.component.html',
-  styleUrl: './character-stats.component.scss',
+    selector: 'app-character-stats',
+    imports: [
+        MatCardModule,
+        MatProgressBarModule,
+        MatProgressSpinnerModule,
+        MatChipsModule,
+        MatListModule,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule
+    ],
+    templateUrl: './character-stats.component.html',
+    styleUrl: './character-stats.component.scss'
 })
 export class CharacterStatsComponent {
   @Input() character!: Character;

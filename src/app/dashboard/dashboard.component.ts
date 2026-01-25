@@ -21,30 +21,26 @@ interface CachedCharacter {
 export type ViewMode = 'card' | 'skills';
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [
-    MatIconModule,
-    MatButtonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    FormsModule,
-    MatTooltipModule,
-    CharacterCardComponent
-],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
-  animations: [
-    trigger('cardAnimation', [
-      transition(':leave', [
-        style({ opacity: 1, transform: 'scale(1)', height: '*' }),
-        animate(
-          '300ms ease-out',
-          style({ opacity: 0, transform: 'scale(0.8)', height: 0, margin: 0 })
-        ),
-      ]),
-    ]),
-  ],
+    selector: 'app-dashboard',
+    imports: [
+        MatIconModule,
+        MatButtonModule,
+        MatInputModule,
+        MatFormFieldModule,
+        FormsModule,
+        MatTooltipModule,
+        CharacterCardComponent
+    ],
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss'],
+    animations: [
+        trigger('cardAnimation', [
+            transition(':leave', [
+                style({ opacity: 1, transform: 'scale(1)', height: '*' }),
+                animate('300ms ease-out', style({ opacity: 0, transform: 'scale(0.8)', height: 0, margin: 0 })),
+            ]),
+        ]),
+    ]
 })
 export class DashboardComponent implements OnInit {
   private characterService = inject(Character2Service);
