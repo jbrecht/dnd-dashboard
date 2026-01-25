@@ -9,24 +9,26 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Character } from '../models/character.model';
+import { StatDisplayMode } from '../models/ui.models';
 
 @Component({
-    selector: 'app-character-stats',
-    imports: [
-        MatCardModule,
-        MatProgressBarModule,
-        MatProgressSpinnerModule,
-        MatChipsModule,
-        MatListModule,
-        MatButtonModule,
-        MatIconModule,
-        MatTooltipModule
-    ],
-    templateUrl: './character-stats.component.html',
-    styleUrl: './character-stats.component.scss'
+  selector: 'app-character-stats',
+  imports: [
+    MatCardModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatChipsModule,
+    MatListModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+  ],
+  templateUrl: './character-stats.component.html',
+  styleUrl: './character-stats.component.scss',
 })
 export class CharacterStatsComponent {
   readonly character = input.required<Character>();
+  readonly statDisplayMode = input<StatDisplayMode>('value-top');
   readonly deleteRequest = output<number>();
   readonly refreshRequest = output<number>();
   readonly showSkillsRequest = output<void>();

@@ -4,14 +4,6 @@
     <div class="top-right-controls">
       <button
         mat-icon-button
-        (click)="toggleViewMode()"
-        class="view-toggle icon-btn"
-        [matTooltip]="viewMode === 'card' ? 'Switch to Skills View' : 'Switch to Card View'"
-        [attr.aria-label]="'Toggle view mode'">
-        <mat-icon>{{ viewMode === 'card' ? 'list' : 'grid_view' }}</mat-icon>
-      </button>
-      <button
-        mat-icon-button
         (click)="openHelp()"
         class="help icon-btn"
         matTooltip="View Help Video"
@@ -33,6 +25,27 @@
         matTooltip="Reload All Characters"
         [attr.aria-label]="'Reload all characters'">
         <mat-icon>refresh</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        (click)="toggleStatDisplayMode()"
+        class="stat-mode-toggle icon-btn"
+        [matTooltip]="
+          statDisplayMode === 'value-top'
+            ? 'Switch to Modifier Emphasis'
+            : 'Switch to Score Emphasis'
+        "
+        [attr.aria-label]="'Toggle stat display mode'">
+        <mat-icon>{{ statDisplayMode === 'value-top' ? 'numbers' : 'exposure' }}</mat-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        (click)="toggleViewMode()"
+        class="view-toggle icon-btn"
+        [matTooltip]="viewMode === 'card' ? 'Switch to Skills View' : 'Switch to Card View'"
+        [attr.aria-label]="'Toggle view mode'">
+        <mat-icon>{{ viewMode === 'card' ? 'school' : 'grid_view' }}</mat-icon>
       </button>
       @if (!showInput) {
         <button
@@ -91,6 +104,7 @@
         <app-character-card
           [character]="char"
           [viewMode]="viewMode"
+          [statDisplayMode]="statDisplayMode"
           (deleteRequest)="removeCharacter(char.id)"
           (refreshRequest)="refreshCharacter(char.id)"
           [@cardAnimation]>

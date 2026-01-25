@@ -13,11 +13,6 @@
   position: relative; /* Ensure loading overlay is contained */
   height: 100%;
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--card-shadow-hover);
-  }
-
   .loading-overlay {
     position: absolute;
     top: 0;
@@ -394,12 +389,30 @@
         .stat-mod {
           font-size: 0.7rem;
           font-weight: 600;
+          line-height: 1;
 
           &.positive {
             color: var(--stat-positive);
           }
           &.negative {
             color: var(--stat-negative);
+          }
+        }
+
+        &.mod-top {
+          .stat-value {
+            order: 2;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0;
+            color: var(--text-secondary);
+          }
+
+          .stat-mod {
+            order: 1;
+            font-size: 1.125rem;
+            font-weight: 800;
+            margin-bottom: 0.125rem;
           }
         }
       }

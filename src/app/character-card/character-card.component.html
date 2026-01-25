@@ -4,6 +4,7 @@
       <div class="card__face card__face--front">
         <app-character-stats
           [character]="character()"
+          [statDisplayMode]="statDisplayMode()"
           (deleteRequest)="onDelete($event)"
           (refreshRequest)="onRefresh($event)"
           (showSkillsRequest)="switchToSkills()">

@@ -11,6 +11,7 @@ import { Character } from '../models/character.model';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { CharacterCardComponent } from '../character-card/character-card.component';
 import { CharacterSkillsComponent } from '../character-skills/character-skills.component';
+import { ViewMode, StatDisplayMode } from '../models/ui.models';
 
 interface CachedCharacter {
   input: string;
@@ -18,29 +19,30 @@ interface CachedCharacter {
   lastUpdated: number;
 }
 
-export type ViewMode = 'card' | 'skills';
-
 @Component({
-    selector: 'app-dashboard',
-    imports: [
-        MatIconModule,
-        MatButtonModule,
-        MatInputModule,
-        MatFormFieldModule,
-        FormsModule,
-        MatTooltipModule,
-        CharacterCardComponent
-    ],
-    templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.scss'],
-    animations: [
-        trigger('cardAnimation', [
-            transition(':leave', [
-                style({ opacity: 1, transform: 'scale(1)', height: '*' }),
-                animate('300ms ease-out', style({ opacity: 0, transform: 'scale(0.8)', height: 0, margin: 0 })),
-            ]),
-        ]),
-    ]
+  selector: 'app-dashboard',
+  imports: [
+    MatIconModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatTooltipModule,
+    CharacterCardComponent,
+  ],
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss'],
+  animations: [
+    trigger('cardAnimation', [
+      transition(':leave', [
+        style({ opacity: 1, transform: 'scale(1)', height: '*' }),
+        animate(
+          '300ms ease-out',
+          style({ opacity: 0, transform: 'scale(0.8)', height: 0, margin: 0 })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class DashboardComponent implements OnInit {
   private characterService = inject(Character2Service);
@@ -52,14 +54,17 @@ export class DashboardComponent implements OnInit {
 
   private readonly STORAGE_KEY = 'dnd-dashboard';
   private readonly VIEW_MODE_KEY = 'dnd-dashboard-view-mode';
+  private readonly STAT_MODE_KEY = 'dnd-dashboard-stat-mode';
 
   isDarkMode = true;
   showInput = true;
   viewMode: ViewMode = 'card';
+  statDisplayMode: StatDisplayMode = 'value-top';
 
   ngOnInit() {
     this.loadTheme();
     this.loadViewMode();
+    this.loadStatDisplayMode();
     this.loadSavedCharacters();
     this.refreshCharacters();
   }
@@ -79,6 +84,11 @@ export class DashboardComponent implements OnInit {
     this.saveViewMode();
   }
 
+  toggleStatDisplayMode() {
+    this.statDisplayMode = this.statDisplayMode === 'value-top' ? 'mod-top' : 'value-top';
+    this.saveStatDisplayMode();
+  }
+
   private loadViewMode() {
     const saved = localStorage.getItem(this.VIEW_MODE_KEY);
     if (saved === 'card' || saved === 'skills') {
@@ -88,6 +98,17 @@ export class DashboardComponent implements OnInit {
 
   private saveViewMode() {
     localStorage.setItem(this.VIEW_MODE_KEY, this.viewMode);
+  }
+
+  private loadStatDisplayMode() {
+    const saved = localStorage.getItem(this.STAT_MODE_KEY);
+    if (saved === 'value-top' || saved === 'mod-top') {
+      this.statDisplayMode = saved;
+    }
+  }
+
+  private saveStatDisplayMode() {
+    localStorage.setItem(this.STAT_MODE_KEY, this.statDisplayMode);
   }
 
   private loadTheme() {
