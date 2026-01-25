@@ -12,20 +12,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
   .header-content {
     h2 {
       margin: 0;
-      font-size: 1.25rem;
+      font-size: 1rem;
       font-weight: 500;
       color: var(--primary-color, #3f51b5);
-    }
-    .subtitle {
-      font-size: 0.875rem;
-      color: rgba(0, 0, 0, 0.6);
     }
   }
 }
@@ -33,18 +26,20 @@
 .skills-list {
   flex: 1;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  column-gap: 8px;
 }
 
 .skill-item {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
+  padding: 2px 6px;
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.03);
   transition: background 0.2s;
+  min-height: 24px;
 
   &:hover {
     background: rgba(0, 0, 0, 0.06);
@@ -61,7 +56,7 @@
   }
 
   .skill-proficiency-icon {
-    margin-right: 12px;
+    margin-right: 6px;
     display: flex;
     align-items: center;
     color: rgba(0, 0, 0, 0.3);
@@ -71,27 +66,31 @@
     }
 
     mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
     }
   }
 
   .skill-name {
     flex: 1;
-    font-size: 0.95rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     .skill-ability {
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       color: rgba(0, 0, 0, 0.5);
-      margin-left: 4px;
+      margin-left: 2px;
     }
   }
 
   .skill-modifier {
     font-weight: bold;
-    min-width: 30px;
+    min-width: 20px;
     text-align: right;
+    font-size: 0.7rem;
   }
 }
 
