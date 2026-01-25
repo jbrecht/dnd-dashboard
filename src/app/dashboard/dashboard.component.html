@@ -4,6 +4,14 @@
     <div class="top-right-controls">
       <button
         mat-icon-button
+        (click)="toggleViewMode()"
+        class="view-toggle icon-btn"
+        [matTooltip]="viewMode === 'card' ? 'Switch to Skills View' : 'Switch to Card View'"
+        [attr.aria-label]="'Toggle view mode'">
+        <mat-icon>{{ viewMode === 'card' ? 'list' : 'grid_view' }}</mat-icon>
+      </button>
+      <button
+        mat-icon-button
         (click)="openHelp()"
         class="help icon-btn"
         matTooltip="View Help Video"
@@ -75,6 +83,7 @@
       <app-character-card
         *ngFor="let char of characters; trackBy: trackById"
         [character]="char"
+        [viewMode]="viewMode"
         (deleteRequest)="removeCharacter(char.id)"
         (refreshRequest)="refreshCharacter(char.id)"
         [@cardAnimation]>

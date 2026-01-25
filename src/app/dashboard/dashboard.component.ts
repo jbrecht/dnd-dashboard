@@ -10,12 +10,15 @@ import { Character2Service, ParsedCharacter } from '../services/character2.servi
 import { Character } from '../models/character.model';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { CharacterCardComponent } from '../character-card/character-card.component';
+import { CharacterSkillsComponent } from '../character-skills/character-skills.component';
 
 interface CachedCharacter {
   input: string;
   character: Character;
   lastUpdated: number;
 }
+
+export type ViewMode = 'card' | 'skills';
 
 @Component({
   selector: 'app-dashboard',
@@ -51,14 +54,17 @@ export class DashboardComponent implements OnInit {
   error = '';
 
   private readonly STORAGE_KEY = 'dnd-dashboard';
+  private readonly VIEW_MODE_KEY = 'dnd-dashboard-view-mode';
 
   constructor(private characterService: Character2Service) {}
 
   isDarkMode = true;
   showInput = true;
+  viewMode: ViewMode = 'card';
 
   ngOnInit() {
     this.loadTheme();
+    this.loadViewMode();
     this.loadSavedCharacters();
     this.refreshCharacters();
   }
@@ -71,6 +77,22 @@ export class DashboardComponent implements OnInit {
 
   toggleInput() {
     this.showInput = !this.showInput;
+  }
+
+  toggleViewMode() {
+    this.viewMode = this.viewMode === 'card' ? 'skills' : 'card';
+    this.saveViewMode();
+  }
+
+  private loadViewMode() {
+    const saved = localStorage.getItem(this.VIEW_MODE_KEY);
+    if (saved === 'card' || saved === 'skills') {
+      this.viewMode = saved;
+    }
+  }
+
+  private saveViewMode() {
+    localStorage.setItem(this.VIEW_MODE_KEY, this.viewMode);
   }
 
   private loadTheme() {

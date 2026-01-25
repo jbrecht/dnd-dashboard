@@ -1,74 +1,44 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatListModule } from '@angular/material/list';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { Character } from '../models/character.model';
 import { CharacterSkillsComponent } from '../character-skills/character-skills.component';
+import { CharacterStatsComponent } from '../character-stats/character-stats.component';
+import { ViewMode } from '../dashboard/dashboard.component';
 
 @Component({
   selector: 'app-character-card',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatChipsModule,
-    MatListModule,
-    MatButtonModule,
-    MatButtonModule,
-    MatIconModule,
-    MatIconModule,
-    MatTooltipModule,
-    CharacterSkillsComponent,
-  ],
+  imports: [CommonModule, CharacterSkillsComponent, CharacterStatsComponent],
   templateUrl: './character-card.component.html',
   styleUrl: './character-card.component.scss',
 })
-export class CharacterCardComponent {
+export class CharacterCardComponent implements OnChanges {
   @Input() character!: Character;
+  @Input() viewMode: ViewMode = 'card';
   @Output() deleteRequest = new EventEmitter<number>();
   @Output() refreshRequest = new EventEmitter<number>();
 
-  showSkills = false;
+  currentMode: ViewMode = 'card';
 
-  get totalLevel(): number {
-    return this.character.classes.reduce((acc, curr) => acc + curr.level, 0);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['viewMode']) {
+      this.currentMode = changes['viewMode'].currentValue;
+    }
   }
 
-  getModifier(value: number): number {
-    return Math.floor((value - 10) / 2);
+  switchToSkills() {
+    this.currentMode = 'skills';
   }
 
-  getModifierString(value: number): string {
-    const mod = this.getModifier(value);
-    return mod > 0 ? `+${mod}` : `${mod}`;
+  switchToStats() {
+    this.currentMode = 'card';
   }
 
-  get hpStatus(): string {
-    if (!this.character.hitPoints.max) return 'healthy';
-    const pct = this.character.hitPoints.current / this.character.hitPoints.max;
-    if (pct < 0.1) return 'critical';
-    if (pct < 0.5) return 'bloodied';
-    return 'healthy';
+  onDelete(id: number) {
+    this.deleteRequest.emit(id);
   }
 
-  delete() {
-    this.deleteRequest.emit(this.character.id);
-  }
-
-  refresh() {
-    this.refreshRequest.emit(this.character.id);
-  }
-
-  getClassTooltip(cls: any): string {
-    const subclassName = cls.subclassDefinition ? ` (${cls.subclassDefinition.name})` : '';
-    return `${cls.definition.name}${subclassName} ${cls.level}`;
+  onRefresh(id: number) {
+    this.refreshRequest.emit(id);
   }
 }
