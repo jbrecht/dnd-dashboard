@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Character2Service, ParsedCharacter } from '../services/character2.service';
 import { Character } from '../models/character.model';
 import { trigger, transition, style, animate } from '@angular/animations';
@@ -26,6 +27,7 @@ interface CachedCharacter {
     MatInputModule,
     MatFormFieldModule,
     FormsModule,
+    MatTooltipModule,
     CharacterCardComponent,
   ],
   templateUrl: './dashboard.component.html',

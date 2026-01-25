@@ -6,6 +6,7 @@
         mat-icon-button
         (click)="openHelp()"
         class="help icon-btn"
+        matTooltip="View Help Video"
         [attr.aria-label]="'View help'">
         <mat-icon>help</mat-icon>
       </button>
@@ -13,6 +14,7 @@
         mat-icon-button
         (click)="toggleTheme()"
         class="theme-toggle icon-btn"
+        [matTooltip]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
         [attr.aria-label]="'Toggle theme'">
         <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
       </button>
@@ -20,6 +22,7 @@
         mat-icon-button
         (click)="refreshCharacters()"
         class="reload-all icon-btn"
+        matTooltip="Reload All Characters"
         [attr.aria-label]="'Reload all characters'">
         <mat-icon>refresh</mat-icon>
       </button>
@@ -28,6 +31,7 @@
         *ngIf="!showInput"
         (click)="toggleInput()"
         class="add-btn icon-btn"
+        matTooltip="Add Character"
         [attr.aria-label]="'Show input'">
         <mat-icon>person_add</mat-icon>
       </button>

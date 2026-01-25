@@ -3,7 +3,11 @@
     <div class="header-content">
       <h2>{{ character.name }} Skills</h2>
     </div>
-    <button mat-icon-button (click)="back.emit()" aria-label="Back to character card">
+    <button
+      mat-icon-button
+      (click)="back.emit()"
+      matTooltip="Back to Character Card"
+      aria-label="Back to character card">
       <mat-icon>undo</mat-icon>
     </button>
   </div>

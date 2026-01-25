@@ -15,6 +15,7 @@
           mat-icon-button
           class="skills-btn"
           (click)="showSkills = true"
+          matTooltip="View Skills"
           aria-label="View skills">
           <mat-icon>school</mat-icon>
         </button>
@@ -23,11 +24,17 @@
           mat-icon-button
           class="refresh-btn"
           (click)="refresh()"
+          matTooltip="Refresh Character"
           aria-label="Refresh character">
           <mat-icon>refresh</mat-icon>
         </button>
 
-        <button mat-icon-button class="delete-btn" (click)="delete()" aria-label="Delete character">
+        <button
+          mat-icon-button
+          class="delete-btn"
+          (click)="delete()"
+          matTooltip="Delete Character"
+          aria-label="Delete character">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
