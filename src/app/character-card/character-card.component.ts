@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Output, EventEmitter, OnChanges, SimpleChanges, input } from '@angular/core';
 
 import { Character } from '../models/character.model';
 import { CharacterSkillsComponent } from '../character-skills/character-skills.component';
@@ -12,8 +12,8 @@ import { ViewMode } from '../dashboard/dashboard.component';
     styleUrl: './character-card.component.scss'
 })
 export class CharacterCardComponent implements OnChanges {
-  @Input() character!: Character;
-  @Input() viewMode: ViewMode = 'card';
+  readonly character = input.required<Character>();
+  readonly viewMode = input<ViewMode>('card');
   @Output() deleteRequest = new EventEmitter<number>();
   @Output() refreshRequest = new EventEmitter<number>();
 

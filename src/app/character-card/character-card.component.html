@@ -1,7 +1,7 @@
 <div class="character-card-container">
   @if (currentMode === 'card') {
     <app-character-stats
-      [character]="character"
+      [character]="character()"
       (deleteRequest)="onDelete($event)"
       (refreshRequest)="onRefresh($event)"
       (showSkillsRequest)="switchToSkills()">
@@ -10,7 +10,7 @@
 
   @if (currentMode === 'skills') {
     <app-character-skills
-      [character]="character"
+      [character]="character()"
       (back)="switchToStats()">
     </app-character-skills>
   }

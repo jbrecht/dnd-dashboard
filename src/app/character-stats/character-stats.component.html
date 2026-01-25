@@ -1,5 +1,5 @@
 <div class="character-stats">
-  @if (character.isLoading) {
+  @if (character().isLoading) {
     <div class="loading-overlay">
       <mat-spinner diameter="50"></mat-spinner>
     </div>
@@ -7,7 +7,7 @@
 
   <div class="card-top">
     <div class="avatar-background">
-      <img [src]="character.avatarUrl || 'assets/placeholder.png'" alt="{{ character.name }}" />
+      <img [src]="character().avatarUrl || 'assets/placeholder.png'" alt="{{ character().name }}" />
       <div class="avatar-overlay"></div>
     </div>
 
@@ -41,10 +41,10 @@
     </div>
 
     <div class="card-header">
-      <h2>{{ character.name }}</h2>
-      <p class="subtitle">{{ character.race.fullName }}</p>
-      <div class="classes-list" [class.compact-mode]="character.classes.length > 2">
-        @for (cls of character.classes; track cls) {
+      <h2>{{ character().name }}</h2>
+      <p class="subtitle">{{ character().race.fullName }}</p>
+      <div class="classes-list" [class.compact-mode]="character().classes.length > 2">
+        @for (cls of character().classes; track cls) {
           <div
             class="class-chip"
             [matTooltip]="getClassTooltip(cls)">
@@ -61,23 +61,23 @@
       </div>
 
       <div class="card-footer-info">
-        @if (character.senses) {
+        @if (character().senses) {
           <div class="passives-container">
             <div class="passives-row">
               <div class="passive-item" matTooltip="Passive Perception">
                 <mat-icon>visibility</mat-icon>
-                <span>{{ character.senses.perception }}</span>
+                <span>{{ character().senses.perception }}</span>
               </div>
               <div class="passive-item" matTooltip="Passive Investigation">
                 <mat-icon>search</mat-icon>
-                <span>{{ character.senses.investigation }}</span>
+                <span>{{ character().senses.investigation }}</span>
               </div>
               <div class="passive-item" matTooltip="Passive Insight">
                 <mat-icon>psychology</mat-icon>
-                <span>{{ character.senses.insight }}</span>
+                <span>{{ character().senses.insight }}</span>
               </div>
               <!-- Special Senses -->
-              @for (sense of character.senses.special; track sense) {
+              @for (sense of character().senses.special; track sense) {
                 <div
                   class="passive-item"
                   [matTooltip]="sense.name + ' ' + sense.value">
@@ -93,39 +93,39 @@
           <div class="ac-container">
             <div class="ac-value" matTooltip="Armor Class">
               <mat-icon class="ac-shield">shield</mat-icon>
-              <span>{{ character.armorClass }}</span>
+              <span>{{ character().armorClass }}</span>
             </div>
           </div>
 
           <div class="movement-stats">
             <div class="stat-item" matTooltip="Initiative">
               <mat-icon>timer</mat-icon>
-              <span>{{ character.initiative >= 0 ? '+' : '' }}{{ character.initiative }}</span>
+              <span>{{ character().initiative >= 0 ? '+' : '' }}{{ character().initiative }}</span>
             </div>
             <div class="stat-item" matTooltip="Speed">
               <mat-icon>directions_run</mat-icon>
-              <span>{{ character.speed }}</span>
+              <span>{{ character().speed }}</span>
             </div>
           </div>
 
           <div class="hp-container">
             <div class="hp-values">
-              @if (character.hitPoints.temp > 0) {
+              @if (character().hitPoints.temp > 0) {
                 <span
                   class="temp"
                   matTooltip="Temporary Hit Points"
-                  >+{{ character.hitPoints.temp }}
+                  >+{{ character().hitPoints.temp }}
                 </span>
               }
               <span class="current" matTooltip="Current Hit Points">{{
-                character.hitPoints.current
+                character().hitPoints.current
               }}</span>
               <span class="separator">/</span>
-              <span class="max" matTooltip="Maximum Hit Points">{{ character.hitPoints.max }}</span>
+              <span class="max" matTooltip="Maximum Hit Points">{{ character().hitPoints.max }}</span>
             </div>
             <mat-progress-bar
               mode="determinate"
-              [value]="(character.hitPoints.current / character.hitPoints.max) * 100"
+              [value]="(character().hitPoints.current / character().hitPoints.max) * 100"
               class="hp-bar"
             [class]="hpStatus"></mat-progress-bar>
           </div>
@@ -135,7 +135,7 @@
 
     <div class="card-bottom">
       <div class="stats-grid">
-        @for (stat of character.stats; track stat) {
+        @for (stat of character().stats; track stat) {
           <div class="stat-box">
             <div class="stat-label">{{ stat.name }}</div>
             <div class="stat-value">{{ stat.value }}</div>

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, input } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -26,13 +26,13 @@ import { Character } from '../models/character.model';
     styleUrl: './character-stats.component.scss'
 })
 export class CharacterStatsComponent {
-  @Input() character!: Character;
+  readonly character = input.required<Character>();
   @Output() deleteRequest = new EventEmitter<number>();
   @Output() refreshRequest = new EventEmitter<number>();
   @Output() showSkillsRequest = new EventEmitter<void>();
 
   get totalLevel(): number {
-    return this.character.classes.reduce((acc, curr) => acc + curr.level, 0);
+    return this.character().classes.reduce((acc, curr) => acc + curr.level, 0);
   }
 
   getModifier(value: number): number {
@@ -45,19 +45,20 @@ export class CharacterStatsComponent {
   }
 
   get hpStatus(): string {
-    if (!this.character.hitPoints.max) return 'healthy';
-    const pct = this.character.hitPoints.current / this.character.hitPoints.max;
+    const character = this.character();
+    if (!character.hitPoints.max) return 'healthy';
+    const pct = character.hitPoints.current / character.hitPoints.max;
     if (pct < 0.1) return 'critical';
     if (pct < 0.5) return 'bloodied';
     return 'healthy';
   }
 
   delete() {
-    this.deleteRequest.emit(this.character.id);
+    this.deleteRequest.emit(this.character().id);
   }
 
   refresh() {
-    this.refreshRequest.emit(this.character.id);
+    this.refreshRequest.emit(this.character().id);
   }
 
   showSkills() {

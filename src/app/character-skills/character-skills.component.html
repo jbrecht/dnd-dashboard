@@ -1,7 +1,7 @@
 <div class="skills-container">
   <div class="skills-header">
     <div class="header-content">
-      <h2>{{ character.name }} Skills</h2>
+      <h2>{{ character().name }} Skills</h2>
     </div>
     <button
       mat-icon-button
@@ -13,7 +13,7 @@
   </div>
 
   <div class="skills-list">
-    @for (skill of character.skills; track skill) {
+    @for (skill of character().skills; track skill) {
       <div
         class="skill-item"
         [class]="getProficiencyClass(skill.proficiency)">
