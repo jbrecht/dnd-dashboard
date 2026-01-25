@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,7 +14,7 @@ import { Character, Skill } from '../models/character.model';
 })
 export class CharacterSkillsComponent {
   readonly character = input.required<Character>();
-  @Output() back = new EventEmitter<void>();
+  readonly back = output<void>();
 
   getModifierString(value: number): string {
     return value >= 0 ? `+${value}` : `${value}`;

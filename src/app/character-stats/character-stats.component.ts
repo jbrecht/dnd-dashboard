@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -27,9 +27,9 @@ import { Character } from '../models/character.model';
 })
 export class CharacterStatsComponent {
   readonly character = input.required<Character>();
-  @Output() deleteRequest = new EventEmitter<number>();
-  @Output() refreshRequest = new EventEmitter<number>();
-  @Output() showSkillsRequest = new EventEmitter<void>();
+  readonly deleteRequest = output<number>();
+  readonly refreshRequest = output<number>();
+  readonly showSkillsRequest = output<void>();
 
   get totalLevel(): number {
     return this.character().classes.reduce((acc, curr) => acc + curr.level, 0);
@@ -62,6 +62,7 @@ export class CharacterStatsComponent {
   }
 
   showSkills() {
+    // TODO: The 'emit' function requires a mandatory void argument
     this.showSkillsRequest.emit();
   }
 
