@@ -12,14 +12,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 8px;
 
   .header-content {
     h2 {
       margin: 0;
-      font-size: 1rem;
+      font-size: 1.25rem;
       font-weight: 500;
       color: var(--primary-color, #3f51b5);
     }
+  }
+
+  button[mat-icon-button] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
