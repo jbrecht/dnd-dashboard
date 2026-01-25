@@ -4,3 +4,50 @@
   display: flex;
   flex-direction: column;
 }
+
+.scene {
+  width: 100%;
+  perspective: 1000px;
+}
+
+.card {
+  width: 100%;
+  position: relative;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.card.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.card__face {
+  width: 100%;
+  backface-visibility: hidden;
+  border-radius: 1rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+app-character-stats,
+app-character-skills {
+  display: block;
+  flex: 1 1 auto; /* Allow growing based on content */
+  width: 100%;
+}
+
+.card__face--front {
+  position: relative; /* Dictates height */
+  z-index: 2;
+  background: transparent;
+  transform: rotateY(0deg);
+}
+
+.card__face--back {
+  position: absolute; /* Overlays front */
+  top: 0;
+  left: 0;
+  height: 100%; /* Matches front height */
+  transform: rotateY(180deg);
+}

@@ -1,17 +1,18 @@
 <div class="character-card-container">
-  @if (currentMode === 'card') {
-    <app-character-stats
-      [character]="character()"
-      (deleteRequest)="onDelete($event)"
-      (refreshRequest)="onRefresh($event)"
-      (showSkillsRequest)="switchToSkills()">
-    </app-character-stats>
-  }
-
-  @if (currentMode === 'skills') {
-    <app-character-skills
-      [character]="character()"
-      (back)="switchToStats()">
-    </app-character-skills>
-  }
+  <div class="scene">
+    <div class="card" [class.is-flipped]="currentMode === 'skills'">
+      <div class="card__face card__face--front">
+        <app-character-stats
+          [character]="character()"
+          (deleteRequest)="onDelete($event)"
+          (refreshRequest)="onRefresh($event)"
+          (showSkillsRequest)="switchToSkills()">
+        </app-character-stats>
+      </div>
+      <div class="card__face card__face--back">
+        <app-character-skills [character]="character()" (back)="switchToStats()">
+        </app-character-skills>
+      </div>
+    </div>
+  </div>
 </div>
