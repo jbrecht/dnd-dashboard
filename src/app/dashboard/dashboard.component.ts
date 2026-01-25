@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -24,15 +24,14 @@ export type ViewMode = 'card' | 'skills';
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    CommonModule,
     MatIconModule,
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
     FormsModule,
     MatTooltipModule,
-    CharacterCardComponent,
-  ],
+    CharacterCardComponent
+],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   animations: [

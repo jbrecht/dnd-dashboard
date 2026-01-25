@@ -34,60 +34,68 @@
         [attr.aria-label]="'Reload all characters'">
         <mat-icon>refresh</mat-icon>
       </button>
-      <button
-        mat-icon-button
-        *ngIf="!showInput"
-        (click)="toggleInput()"
-        class="add-btn icon-btn"
-        matTooltip="Add Character"
-        [attr.aria-label]="'Show input'">
-        <mat-icon>person_add</mat-icon>
-      </button>
-    </div>
-
-    <!-- Input Card (Centered) -->
-    <div class="input-card-container" *ngIf="showInput">
-      <div class="input-card">
+      @if (!showInput) {
         <button
           mat-icon-button
           (click)="toggleInput()"
-          class="close-btn"
-          [attr.aria-label]="'Hide input'">
-          <mat-icon>close</mat-icon>
+          class="add-btn icon-btn"
+          matTooltip="Add Character"
+          [attr.aria-label]="'Show input'">
+          <mat-icon>person_add</mat-icon>
         </button>
-        <div class="input-container">
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Character ID</mat-label>
-            <input
-              matInput
-              [(ngModel)]="characterInput"
-              placeholder="123456"
-              (keyup.enter)="importCharacter()" />
-            <mat-icon matPrefix class="mr-2 text-gray-400">tag</mat-icon>
-            <button
-              mat-icon-button
-              matSuffix
-              (click)="importCharacter()"
-              [attr.aria-label]="'Import character'"
-              color="primary">
-              <mat-icon>download</mat-icon>
-            </button>
-            <mat-hint *ngIf="!error">Enter DnD Beyond Character ID</mat-hint>
-            <mat-hint *ngIf="error" style="color: #ef4444">{{ error }}</mat-hint>
-          </mat-form-field>
-        </div>
-      </div>
+      }
     </div>
 
+    <!-- Input Card (Centered) -->
+    @if (showInput) {
+      <div class="input-card-container">
+        <div class="input-card">
+          <button
+            mat-icon-button
+            (click)="toggleInput()"
+            class="close-btn"
+            [attr.aria-label]="'Hide input'">
+            <mat-icon>close</mat-icon>
+          </button>
+          <div class="input-container">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Character ID</mat-label>
+              <input
+                matInput
+                [(ngModel)]="characterInput"
+                placeholder="123456"
+                (keyup.enter)="importCharacter()" />
+              <mat-icon matPrefix class="mr-2 text-gray-400">tag</mat-icon>
+              <button
+                mat-icon-button
+                matSuffix
+                (click)="importCharacter()"
+                [attr.aria-label]="'Import character'"
+                color="primary">
+                <mat-icon>download</mat-icon>
+              </button>
+              @if (!error) {
+                <mat-hint>Enter DnD Beyond Character ID</mat-hint>
+              }
+              @if (error) {
+                <mat-hint style="color: #ef4444">{{ error }}</mat-hint>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    }
+
     <div class="character-grid">
-      <app-character-card
-        *ngFor="let char of characters; trackBy: trackById"
-        [character]="char"
-        [viewMode]="viewMode"
-        (deleteRequest)="removeCharacter(char.id)"
-        (refreshRequest)="refreshCharacter(char.id)"
-        [@cardAnimation]>
-      </app-character-card>
+      @for (char of characters; track trackById($index, char)) {
+        <app-character-card
+          [character]="char"
+          [viewMode]="viewMode"
+          (deleteRequest)="removeCharacter(char.id)"
+          (refreshRequest)="refreshCharacter(char.id)"
+          [@cardAnimation]>
+        </app-character-card>
+      }
     </div>
   </div>
 </div>

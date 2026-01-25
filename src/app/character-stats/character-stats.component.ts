@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -14,7 +14,6 @@ import { Character } from '../models/character.model';
   selector: 'app-character-stats',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
@@ -22,8 +21,8 @@ import { Character } from '../models/character.model';
     MatListModule,
     MatButtonModule,
     MatIconModule,
-    MatTooltipModule,
-  ],
+    MatTooltipModule
+],
   templateUrl: './character-stats.component.html',
   styleUrl: './character-stats.component.scss',
 })

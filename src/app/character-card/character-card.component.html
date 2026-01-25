@@ -1,15 +1,17 @@
 <div class="character-card-container">
-  <app-character-stats
-    *ngIf="currentMode === 'card'"
-    [character]="character"
-    (deleteRequest)="onDelete($event)"
-    (refreshRequest)="onRefresh($event)"
-    (showSkillsRequest)="switchToSkills()">
-  </app-character-stats>
+  @if (currentMode === 'card') {
+    <app-character-stats
+      [character]="character"
+      (deleteRequest)="onDelete($event)"
+      (refreshRequest)="onRefresh($event)"
+      (showSkillsRequest)="switchToSkills()">
+    </app-character-stats>
+  }
 
-  <app-character-skills
-    *ngIf="currentMode === 'skills'"
-    [character]="character"
-    (back)="switchToStats()">
-  </app-character-skills>
+  @if (currentMode === 'skills') {
+    <app-character-skills
+      [character]="character"
+      (back)="switchToStats()">
+    </app-character-skills>
+  }
 </div>

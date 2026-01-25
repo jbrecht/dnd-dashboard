@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Character } from '../models/character.model';
 import { CharacterSkillsComponent } from '../character-skills/character-skills.component';
 import { CharacterStatsComponent } from '../character-stats/character-stats.component';
@@ -8,7 +8,7 @@ import { ViewMode } from '../dashboard/dashboard.component';
 @Component({
   selector: 'app-character-card',
   standalone: true,
-  imports: [CommonModule, CharacterSkillsComponent, CharacterStatsComponent],
+  imports: [CharacterSkillsComponent, CharacterStatsComponent],
   templateUrl: './character-card.component.html',
   styleUrl: './character-card.component.scss',
 })
