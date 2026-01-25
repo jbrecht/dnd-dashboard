@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -48,6 +48,8 @@ export type ViewMode = 'card' | 'skills';
   ],
 })
 export class DashboardComponent implements OnInit {
+  private characterService = inject(Character2Service);
+
   characterInput = '';
   characters: Character[] = [];
   loading = false;
@@ -55,8 +57,6 @@ export class DashboardComponent implements OnInit {
 
   private readonly STORAGE_KEY = 'dnd-dashboard';
   private readonly VIEW_MODE_KEY = 'dnd-dashboard-view-mode';
-
-  constructor(private characterService: Character2Service) {}
 
   isDarkMode = true;
   showInput = true;
